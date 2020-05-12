@@ -10,29 +10,29 @@ function setConnected(connected) {
 
 // function createHeader(){
 //
-//     // var header;
-//     //
-//     // let request = new XMLHttpRequest();
-//     // request.open("GET", "http://localhost:8080/csrf");
-//     // request.send();
-//     // request.onload = () => {
-//     //     if(request.status === 200){
-//     //         console.log(JSON.parse(request.response));
-//     //
-//     //         let headerName = JSON.parse(request.response).headerName;
-//     //         let token = JSON.parse(request.response).token;
-//     //
-//     //         header = {
-//     //             headerName: headerName,
-//     //             token: token
-//     //         };
-//     //
-//     //         console.log(JSON.stringify(header));
-//     //
-//     //     } else {
-//     //         console.log("no csrf");
-//     //     }
-//     // };
+//     let header;
+//
+//     let request = new XMLHttpRequest();
+//     request.open("GET", "http://localhost:8080/csrf");
+//     request.send();
+//     request.onload = () => {
+//         if(request.status === 200){
+//             console.log(JSON.parse(request.response));
+//
+//             let headerName = JSON.parse(request.response).headerName;
+//             let token = JSON.parse(request.response).token;
+//
+//             header = {
+//                 headerName: headerName,
+//                 token: token
+//             };
+//
+//             console.log(JSON.stringify(header));
+//
+//         } else {
+//             console.log("no csrf");
+//         }
+//     };
 //
 //
 //
@@ -41,8 +41,9 @@ function setConnected(connected) {
 // const getCsrfHeader = async () =>{
 //
 //     try{
-//         const fetchHeaders = await fetch("http://localhost:8080/csrf");
-//         return await fetchHeaders.json();
+//         const response = await fetch("http://localhost:8080/csrf");
+//         console.log((JSON.parse(response).headerName));
+//         return await response;
 //     } catch (e){
 //         console.log(e);
 //     }
@@ -50,13 +51,22 @@ function setConnected(connected) {
 // };
 
 
-function connect() {
+async function connect() {
+
+
+    const response = await fetch("http://localhost:8080/csrf");
+    let data = await response.json();
+    console.log(data);
+
+    let headers = {};
+    headers[data.headerName] = data.token;
+    console.log(headers);
+
 
     var socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
 
-
-        stompClient.connect({}, function (frame) {
+        stompClient.connect(headers, function (frame) {
 
             setConnected(true);
             console.log("Connected: "+frame);
@@ -95,9 +105,8 @@ function disconnect() {
 
 function showUser(user) {
     console.log("user being shown");
-    var userObject = JSON.parse(user);
-    console.log(userObject);
-    userData.innerHTML = JSON.stringify(userObject);
+    console.log(user);
+    userData.innerHTML = "Retrieved Random User: "+user;
 }
 
 function getUser() {

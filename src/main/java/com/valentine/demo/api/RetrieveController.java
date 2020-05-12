@@ -49,7 +49,7 @@ public class RetrieveController {
 
     @GetMapping("/api-v1-retrieve")
     @MessageMapping("/get-person")
-    @SendTo("/topic/random-server")
+    @SendTo("/topic/random-user")
     public String getRandomUser() throws Exception {
 
         Thread.sleep(1000);
