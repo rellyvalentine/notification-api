@@ -1,0 +1,126 @@
+/*This container holds the main page content*/
+.notif-container{
+    margin-left: 0;
+    padding-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-color: rgb(56, 68, 77)
+}
+
+.notif-container h1, form{
+    padding-left: 20px;
+}
+
+/*This container holds the header/navbar */
+.home-header{
+    height: 100%;
+    min-width: 200px;
+    max-width: 250px;
+    /*    z-index: 3;*/
+    top: 10px;
+    left: 0;
+    /*    overflow-x: hidden;*/
+    margin: 0;
+    /*    padding-top: 40px;*/
+    padding-left: 0;
+    padding-right: 0;
+
+}
+
+/*The Nav-Links class is an extension of the header class
+    It will inherit the height and width of the header class*/
+.home-header .nav-links{
+    display: flex; /* Sets to a Flex box */
+    flex-direction: column;
+    justify-content: space-evenly; /* Evenly spaces each of the nav items*/
+    align-items: flex-start;
+    padding-top: 1px;
+
+}
+
+.btn {
+    border: 0;
+    border-radius: 40px;
+    background-color: rgb(121, 75, 196);
+    color: white;
+}
+
+.connect, .disconnect {
+    border-radius: 5px;
+}
+
+.connect:hover {
+    background-color: rgb(134, 93, 202);
+    color: white;
+}
+
+/*Holds the style for each link*/
+.nav-option{
+    display: flex;
+    flex-direction: row; /* makes items in the flex align in a row */
+    align-items: baseline; /* aligns the icon and text on the same line vertically */
+    padding-top: 10px;
+    /*    border-radius: 40px;*/
+    background-color: rgb(25, 32, 43);
+
+}
+
+/*To adjust the hover properties on children of a class
+    We must create separate CSS sections for them*/
+
+/*Parent Hover properties*/
+.nav-option:hover {
+    background-color: rgba(121, 75, 196, .10);
+    color: rgb(121, 75, 196);
+
+}
+
+/*Child Hover properties: Text*/
+.nav-option:hover .option-text{
+    color: rgb(121, 75, 196);
+}
+
+/*Child Hover properties: icon*/
+.nav-option:hover i{
+    color: rgb(121, 75, 196);
+}
+
+/*Child CSS properties: text*/
+.nav-option .option-text{
+    font-family: inherit;
+    font-size: 22px;
+    margin-left: 25px;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+}
+
+/*Child CSS properties: icons*/
+.nav-option i{
+    color: white;
+}
+
+/*Notification badge*/
+.badge{
+    background: rgb(121, 75, 196);
+    min-width: 30px;
+    min-height: 30px;
+    border: 2px solid rgb(25, 32, 43);
+    width: auto;
+    height: auto;
+    margin: 0;
+    border-radius: 50%;
+    position:absolute;
+    bottom: 105px;
+    left: 50px;
+    margin: 0;
+    padding: 6px 0 0; /*adds a top padding of 6px*/
+    /*    padding-bottom: 5px;*/
+}
+
+/*This extends the previous badge class so it inherits the other properties*/
+.message{
+    position: absolute;
+    bottom: 45px;
+}

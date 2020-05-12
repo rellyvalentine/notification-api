@@ -1,0 +1,25 @@
+.icon-wrapper{
+    position: relative;
+    float: right;
+}
+
+.notification{
+    background-color: rgb(25, 32, 43);
+    border-color: rgb(56, 68, 77);
+    color: white
+}
+
+.notification:hover{
+    background-color: rgb(25, 39, 52);
+}
+
+.list-container{
+    display: flex;
+}
+
+.fas {
+    margin-bottom: auto;
+    margin-top: auto;
+    padding-right: 10px;
+    color: deepskyblue;
+}

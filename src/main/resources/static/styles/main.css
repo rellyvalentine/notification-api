@@ -1,0 +1,32 @@
+.icon-wrapper{
+    position:relative;
+    float:right;
+}
+
+*.icon-blue {color: #0088cc}
+*.icon-grey {color: grey}
+
+.badge{
+    background: rgb(56, 46, 191);
+    min-width: 30px;
+    min-height: 30px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border-radius: 50%;
+    position:absolute;
+    top:-14px;
+    right:-8px;
+    padding:5px;
+}
+
+.list-container{
+    display: flex;
+}
+
+.fas {
+    margin-bottom: auto;
+    margin-top: auto;
+    padding-right: 10px;
+    color: deepskyblue;
+}
