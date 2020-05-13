@@ -17,7 +17,7 @@ public interface NotificationStore extends JpaRepository<Notification, Long> {
 
     @Query(nativeQuery = true, value = "SELECT id, head, body, date, is_new, user_id " +
             "FROM notification " +
-            "WHERE user_id = ?1")
+            "WHERE user_id = ?1 ORDER BY date DESC")
     List<Notification> findAllByUserId(@Param("user_id") long user_id);
 
 //    @Query(nativeQuery = true, value = "SELECT id, head, body, date, is_new " +
