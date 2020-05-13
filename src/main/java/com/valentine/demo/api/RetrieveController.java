@@ -10,12 +10,11 @@ import com.valentine.demo.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -37,6 +36,9 @@ public class RetrieveController {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    SimpMessageSendingOperations sendingOperations;
+
 
 
 //    @GetMapping("/api-v1/retrieve")
@@ -51,8 +53,8 @@ public class RetrieveController {
 
     @GetMapping("/api-v1-retrieve")
     @MessageMapping("/get-person")
-    @SendTo("/topic/random-user")
-    public UserAccount getRandomUser() throws Exception {
+    @SendToUser("/topic/random-user")
+    public UserAccount getRandomUser(Principal principal) throws Exception {
 
         Thread.sleep(1000);
 
@@ -79,10 +81,12 @@ public class RetrieveController {
 //we will create our notification here and update the user it goes to through the websocket subscription
     @PostMapping("/api-v1/save-notif")
     @MessageMapping("/new-notif")
-    @SendToUser("/queue/bell")
-    public int addNotification(long userId) throws Exception {
+    @RequestMapping("/queue/bell")
+    public void addNotification(long userId, Principal principal) throws Exception {
         Thread.sleep(1000);
-        DemoApplication.logger.debug("This notification is for: "+userService.getUserById(userId));
+
+        DemoApplication.logger.debug("Currently Logged in:  "+userService.getLoggedInUserAccount().getUserName());
+        DemoApplication.logger.debug("This notification is for: "+userService.getUserById(userId).getUserName());
 
         Notification notification = new Notification();
 
@@ -103,8 +107,11 @@ public class RetrieveController {
         notification.setNew(true);
         notificationService.saveNotification(notification);
 
+        //update the notification size of the user that is accessed
+        sendingOperations.convertAndSendToUser(userService.getUserById(userId).getUserName(), "/queue/bell", notificationService.getNewNotifications(userId).size());
+
         //return the new notifications for the logged in user
-        return notificationService.getNewNotifications(userService.getLoggedInUserAccount().getUserId()).size();
+//        return notificationService.getNewNotifications(userService.getLoggedInUserAccount().getUserId()).size();
     }
 
     @PostMapping("/api-v1/read-notif")

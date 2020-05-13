@@ -29,7 +29,7 @@ async function connect() {
             setConnected(true);
             console.log("Connected: "+frame);
 
-            stompClient.subscribe('/topic/random-user', function (message) {
+            stompClient.subscribe('/user/topic/random-user', function (message) {
                 console.log(message);
                 let user = JSON.parse(message.body);
 
@@ -37,8 +37,8 @@ async function connect() {
                 showUser(user.username);
             });
 
-            stompClient.subscribe('/queue/bell', function (message) {
-                console.log(message);
+            stompClient.subscribe('/user/queue/bell', function (message) {
+                console.log("bell reached"+message);
                 updateBell(message.body);
             });
         });
