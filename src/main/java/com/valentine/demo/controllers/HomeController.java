@@ -29,8 +29,6 @@ public class HomeController {
     @Autowired
     UserAccountService accountService;
 
-
-
 //    @GetMapping("/")
 //    public String showHome(Model model){
 //        List<Notification> notifications = notificationService.getNewNotifications();
@@ -54,12 +52,19 @@ public class HomeController {
     @GetMapping("/home")
     public String userHome(Model model){
         UserAccount user = accountService.getLoggedInUserAccount();
-        List<Notification> notifications = notificationService.getAllNotificationsByUserId(user.getUserId());
+        List<Notification> notifications = notificationService.getNewNotifications(user.getUserId());
         model.addAttribute("notifications", notifications);
 
         return "/user-home";
     }
 
+    @GetMapping("/notifications")
+    public String userNotifications(Model model){
+        UserAccount user = accountService.getLoggedInUserAccount();
+        List<Notification> notifications = notificationService.getAllNotificationsByUserId(user.getUserId());
+        model.addAttribute("notifications", notifications);
+        return "/notifications";
+    }
 
 
 }

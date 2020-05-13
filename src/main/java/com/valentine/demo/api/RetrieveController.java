@@ -116,8 +116,7 @@ public class RetrieveController {
 
     @PostMapping("/api-v1/read-notif")
     public void readNotification(@RequestBody long notificationId){
-//        DemoApplication.logger.debug("Reading notification: "+notificationId);
-        //the notification is no longer new since it's been opened
+        DemoApplication.logger.debug("Reading notification: "+notificationId);
         notificationService.readNotification(notificationId);
     }
 

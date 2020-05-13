@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
-                .ignoringAntMatchers("/topic/**")
+                .ignoringAntMatchers("/topic/**", "/api-v1/**")
                 .and()
                 .headers()
                 .frameOptions().sameOrigin()
@@ -49,6 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/messages").hasAuthority("USER")
                 .antMatchers("/home").hasAuthority("USER")
                 .antMatchers("/notifications").hasAuthority("USER")
+                .antMatchers("/api-v1/read-notif").hasAuthority("USER")
                 .antMatchers("/","/**").permitAll()
                 .and()
                 .formLogin()
