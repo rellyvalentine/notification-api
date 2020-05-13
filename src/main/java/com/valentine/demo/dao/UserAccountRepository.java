@@ -21,6 +21,10 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
             "WHERE username = ?1")
     UserAccount getUserAccountByUserName(String username);
 
+    @Query(nativeQuery = true, value = "SELECT user_id, username, password, role " +
+            "FROM user_accounts " +
+            "WHERE username = ?1")
+    UserAccount getUserAccountById(long id);
 
 
 }

@@ -10,6 +10,7 @@ import com.valentine.demo.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,7 @@ public class RetrieveController {
     private NotificationService notificationService;
 
 
+
 //    @GetMapping("/api-v1/retrieve")
 //    public Person getPerson(){
 //
@@ -50,14 +52,14 @@ public class RetrieveController {
     @GetMapping("/api-v1-retrieve")
     @MessageMapping("/get-person")
     @SendTo("/topic/random-user")
-    public String getRandomUser() throws Exception {
+    public UserAccount getRandomUser() throws Exception {
 
         Thread.sleep(1000);
 
         List<UserAccount> users = userService.getAllUsers();
         Random rand = new Random(); //get a random index from the list
         DemoApplication.logger.debug("User accessed: "+users.get(rand.nextInt(users.size())).getUserName());
-        return users.get(rand.nextInt(users.size())).getUserName(); //return the name of the random users
+        return users.get(rand.nextInt(users.size()));
     }
 
 
@@ -75,12 +77,12 @@ public class RetrieveController {
 
 
 //we will create our notification here and update the user it goes to through the websocket subscription
-//  @MessageMapping("/new-notif")
     @PostMapping("/api-v1/save-notif")
-    @SendTo("/topic/bell")
+    @MessageMapping("/new-notif")
+    @SendToUser("/queue/bell")
     public int addNotification(long userId) throws Exception {
         Thread.sleep(1000);
-        DemoApplication.logger.debug("This notification is for: "+userId);
+        DemoApplication.logger.debug("This notification is for: "+userService.getUserById(userId));
 
         Notification notification = new Notification();
 
@@ -101,8 +103,8 @@ public class RetrieveController {
         notification.setNew(true);
         notificationService.saveNotification(notification);
 
-        //return the notifications for the specific user
-        return notificationService.getAllNotificationsByUserId(userId).size();
+        //return the new notifications for the logged in user
+        return notificationService.getNewNotifications(userService.getLoggedInUserAccount().getUserId()).size();
     }
 
     @PostMapping("/api-v1/read-notif")

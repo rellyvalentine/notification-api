@@ -8,48 +8,6 @@ function setConnected(connected) {
 
 
 
-// function createHeader(){
-//
-//     let header;
-//
-//     let request = new XMLHttpRequest();
-//     request.open("GET", "http://localhost:8080/csrf");
-//     request.send();
-//     request.onload = () => {
-//         if(request.status === 200){
-//             console.log(JSON.parse(request.response));
-//
-//             let headerName = JSON.parse(request.response).headerName;
-//             let token = JSON.parse(request.response).token;
-//
-//             header = {
-//                 headerName: headerName,
-//                 token: token
-//             };
-//
-//             console.log(JSON.stringify(header));
-//
-//         } else {
-//             console.log("no csrf");
-//         }
-//     };
-//
-//
-//
-// }
-
-// const getCsrfHeader = async () =>{
-//
-//     try{
-//         const response = await fetch("http://localhost:8080/csrf");
-//         console.log((JSON.parse(response).headerName));
-//         return await response;
-//     } catch (e){
-//         console.log(e);
-//     }
-//
-// };
-
 
 async function connect() {
 
@@ -73,12 +31,13 @@ async function connect() {
 
             stompClient.subscribe('/topic/random-user', function (message) {
                 console.log(message);
-                console.log(message.body);
-                // createNotification(message.body);
-                showUser(message.body);
+                let user = JSON.parse(message.body);
+
+                createNotification(user.userId);
+                showUser(user.username);
             });
 
-            stompClient.subscribe('/topic/bell', function (message) {
+            stompClient.subscribe('/queue/bell', function (message) {
                 console.log(message);
                 updateBell(message.body);
             });
@@ -95,13 +54,9 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-// function createNotification(id){
-//     stompClient.send("/app/new-notif", {}, JSON.stringify({
-//         head: "Random Access",
-//         body: "You have been accessed by a random user",
-//         userId: JSON.parse(id)
-//     }));
-// }
+function createNotification(id){
+    stompClient.send("/app/new-notif", {}, id);
+}
 
 function showUser(user) {
     console.log("user being shown");

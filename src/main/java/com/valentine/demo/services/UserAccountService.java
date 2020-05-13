@@ -39,6 +39,10 @@ public class UserAccountService implements UserDetailsService {
         userAccountRepo.save(userAccount);
     }
 
+    public UserAccount getUserById(long id){
+        return userAccountRepo.getUserAccountById(id);
+    }
+
     public List<UserAccount> getAllUsers(){
         return userAccountRepo.findAll();
     }

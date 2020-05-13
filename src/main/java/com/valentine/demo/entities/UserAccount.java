@@ -1,5 +1,6 @@
 package com.valentine.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.valentine.demo.entities.messaging.Chat;
 import com.valentine.demo.entities.messaging.Message;
 
@@ -17,6 +18,7 @@ public class UserAccount {
     private long userId;
 
     @Column(name = "username")
+    @JsonProperty("username")
     private String userName;
     @Column(name = "password")
     private String password;
