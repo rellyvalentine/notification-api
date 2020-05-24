@@ -27,24 +27,19 @@ public class ImageController {
     @Autowired
     UserAccountService userService;
 
-//    @GetMapping("/")
-//    public String imagePage(Model model){
-//        Image image = new Image();
-//        model.addAttribute("image", image);
-//        return "/image-test";
-//    }
-
-    @PostMapping("/upload")
-    public void uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/upload-pfp")
+    public void uploadProfilePicture(@RequestParam("file") MultipartFile file) throws IOException {
         long pictureNumber = userService.getLoggedInUserAccount().getUserId();
-        File destination = new File("src/main/resources/static/photos/img"+pictureNumber+".png");
+        String fileName = "photos/img"+pictureNumber+".png";
+        File destination = new File("src/main/resources/static/"+fileName);
+
         if(!file.isEmpty()){
             BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
             ImageIO.write(src, "png", destination);
         }
 
         Image image = new Image();
-        image.setLocation("");
+        image.setLocation(fileName);
         image.setId(pictureNumber);
         imageService.save(image);
     }

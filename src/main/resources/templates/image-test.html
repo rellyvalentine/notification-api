@@ -79,7 +79,7 @@
 
 <main>
     <section class="img-upload-container">
-        <form autocomplete="off" th:action="@{/register/save}" th:object="${image}" method="POST">
+        <form autocomplete="off" th:action="@{/images/upload-pfp}" th:object="${image}" method="POST">
             <h3>Upload an Image</h3>
             <input th:field="${image.location}" type="file">
             <button type="submit">Upload Picture</button>
