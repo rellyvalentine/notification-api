@@ -3,12 +3,11 @@ package com.valentine.demo.image;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "image_test")
+@Table(name = "profile_picture")
 public class Image {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private long id;
 
     @Column(name = "location")

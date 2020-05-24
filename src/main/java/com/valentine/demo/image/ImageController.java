@@ -1,6 +1,7 @@
 package com.valentine.demo.image;
 
 import com.valentine.demo.DemoApplication;
+import com.valentine.demo.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,27 +24,28 @@ public class ImageController {
     @Autowired
     ImageService imageService;
 
-    @GetMapping("/")
-    public String imagePage(Model model){
-        Image image = new Image();
-        model.addAttribute("image", image);
-        return "/image-test";
-    }
+    @Autowired
+    UserAccountService userService;
+
+//    @GetMapping("/")
+//    public String imagePage(Model model){
+//        Image image = new Image();
+//        model.addAttribute("image", image);
+//        return "/image-test";
+//    }
 
     @PostMapping("/upload")
     public void uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
-        int nextNumber = imageService.getImageNumber() + 1;
-        File destination = new File("src/main/resources/static/photos/img"+nextNumber+".png");
+        long pictureNumber = userService.getLoggedInUserAccount().getUserId();
+        File destination = new File("src/main/resources/static/photos/img"+pictureNumber+".png");
         if(!file.isEmpty()){
             BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
             ImageIO.write(src, "png", destination);
         }
 
         Image image = new Image();
-        DemoApplication.logger.debug("Path: "+destination.getPath());
-        DemoApplication.logger.debug("Absolute Path: "+destination.getAbsolutePath());
-        DemoApplication.logger.debug("Canonical Path: "+destination.getCanonicalPath());
-        image.setLocation(destination.getPath());
+        image.setLocation("");
+        image.setId(pictureNumber);
         imageService.save(image);
     }
 
