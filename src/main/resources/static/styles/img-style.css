@@ -1,0 +1,121 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    font-family: "Segoe UI";
+    background: rgb(21, 32, 43);
+    color: #eee;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body {
+    display: grid;
+    grid: 'sidebar main' 1fr / 402px 1fr;
+
+}
+
+.theme-color {
+    color: rgb(121, 75, 196);
+}
+
+.sidebar-container {
+    grid-area: sidebar;
+    display: grid;
+    max-width: 402px;
+    /*    padding-right: 20px;*/
+    border-right: 1px solid rgb(56, 68, 77);
+
+}
+
+.navbar {
+    display: flex;
+    flex-direction: column;
+    justify-self: end;
+    max-width: 275px;
+    min-width: 275px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.navbar > h1 {
+    max-height: 53px;
+    font-size: 22px;
+    margin-top: 10px;
+}
+
+.navbar > .nav-links {
+    margin-top: 20px;
+}
+
+.nav-option {
+    width: fit-content;
+    display: grid;
+    grid-template-columns: 26.25px 1fr;
+    grid-column-gap: 25px;
+    place-items: center start;
+    color: inherit;
+
+    padding: 10px;
+    margin-top: 4px;
+    text-decoration: none;
+    transition: 0.1s;
+    border-radius: 40px;
+}
+
+.nav-option > p{
+    font-size: 20px;
+}
+
+/*
+.nav-option > i {
+    font-size: 26px;
+}
+*/
+
+.navbar-icon {
+    fill: #eee;
+}
+
+.nav-option:hover {
+    background: rgba(121, 75, 196, 0.10);
+    color: rgb(121, 75, 196);
+}
+
+.nav-option:hover > .navbar-icon {
+    fill: rgb(121, 75, 196);
+}
+
+.current-page {
+    color: rgb(121, 75, 196);
+    fill: rgb(121, 75, 196);
+}
+
+main {
+    grid-area: main;
+    display: grid;
+    grid: 1fr / 13fr 20fr;
+}
+
+.img-upload-container {
+    grid-column-start: 1;
+    border-right: 1px solid rgb(56, 68, 77);
+}
+
+.img-upload-container > form {
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+
+.img-display-container {
+    grid-column-start: 2;
+    border-right: 1px solid rgb(56, 68, 77);
+}
