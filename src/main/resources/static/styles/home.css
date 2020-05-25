@@ -1,126 +1,376 @@
-/*This container holds the main page content*/
-.notif-container{
-    margin-left: 0;
-    padding-left: 0;
-    margin-right: 0;
-    padding-right: 0;
-    border-left: 1px solid;
-    border-right: 1px solid;
-    border-color: rgb(56, 68, 77)
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.notif-container h1, form{
-    padding-left: 20px;
-}
-
-/*This container holds the header/navbar */
-.home-header{
+html, body {
     height: 100%;
-    min-width: 200px;
-    max-width: 250px;
-    /*    z-index: 3;*/
-    top: 10px;
-    left: 0;
-    /*    overflow-x: hidden;*/
-    margin: 0;
-    /*    padding-top: 40px;*/
-    padding-left: 0;
-    padding-right: 0;
+}
+
+html {
+    font-family: "Segoe UI";
+    background: rgb(21, 32, 43);
+    color: #eee;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body {
+    display: grid;
+    grid: 'sidebar main' 1fr / 402px 1fr;
 
 }
 
-/*The Nav-Links class is an extension of the header class
-    It will inherit the height and width of the header class*/
-.home-header .nav-links{
-    display: flex; /* Sets to a Flex box */
-    flex-direction: column;
-    justify-content: space-evenly; /* Evenly spaces each of the nav items*/
-    align-items: flex-start;
-    padding-top: 1px;
+.theme-color {
+    color: rgb(121, 75, 196);
+}
+
+.sidebar-container {
+    grid-area: sidebar;
+    display: grid;
+    max-width: 402px;
+    /*    padding-right: 20px;*/
+    border-right: 1px solid rgb(56, 68, 77);
 
 }
 
-.btn {
-    border: 0;
-    border-radius: 40px;
-    background-color: rgb(121, 75, 196);
-    color: white;
-}
-
-.connect, .disconnect {
-    border-radius: 5px;
-}
-
-.connect:hover {
-    background-color: rgb(134, 93, 202);
-    color: white;
-}
-
-/*Holds the style for each link*/
-.nav-option{
+.navbar {
     display: flex;
-    flex-direction: row; /* makes items in the flex align in a row */
-    align-items: baseline; /* aligns the icon and text on the same line vertically */
-    padding-top: 10px;
-    /*    border-radius: 40px;*/
-    background-color: rgb(25, 32, 43);
-
+    flex-direction: column;
+    justify-self: end;
+    height: 99%;
+    max-width: 275px;
+    min-width: 275px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-/*To adjust the hover properties on children of a class
-    We must create separate CSS sections for them*/
-
-/*Parent Hover properties*/
-.nav-option:hover {
-    background-color: rgba(121, 75, 196, .10);
-    color: rgb(121, 75, 196);
-
-}
-
-/*Child Hover properties: Text*/
-.nav-option:hover .option-text{
-    color: rgb(121, 75, 196);
-}
-
-/*Child Hover properties: icon*/
-.nav-option:hover i{
-    color: rgb(121, 75, 196);
-}
-
-/*Child CSS properties: text*/
-.nav-option .option-text{
-    font-family: inherit;
+.navbar > h1 {
+    max-height: 53px;
     font-size: 22px;
-    margin-left: 25px;
-    margin-bottom: 0;
-    padding-bottom: 10px;
+    margin-top: 10px;
 }
 
-/*Child CSS properties: icons*/
-.nav-option i{
-    color: white;
+.navbar > .nav-links {
+    margin-top: 20px;
 }
 
-/*Notification badge*/
-.badge{
+.nav-option {
+    width: fit-content;
+    display: grid;
+    grid-template-columns: 26.25px 1fr;
+    grid-column-gap: 25px;
+    place-items: center start;
+    color: inherit;
+
+    padding: 10px;
+    margin-top: 4px;
+    text-decoration: none;
+    transition: 0.1s;
+    border-radius: 40px;
+}
+
+.nav-option > p{
+    font-size: 20px;
+}
+
+/*
+.nav-option > i {
+    font-size: 26px;
+}
+*/
+
+.navbar-icon {
+    fill: #eee;
+}
+
+.nav-option:hover {
+    background: rgba(121, 75, 196, 0.10);
+    color: rgb(121, 75, 196);
+}
+
+.nav-option:hover > .navbar-icon {
+    fill: rgb(121, 75, 196);
+}
+
+.current-page {
+    color: rgb(121, 75, 196);
+    fill: rgb(121, 75, 196);
+}
+
+main {
+    grid-area: main;
+    display: grid;
+    grid: 1fr / 13fr 20fr;
+}
+
+.profile-container {
+    margin-top: auto;
+    margin-right: 0;
+}
+
+.profile-button {
+    display: grid;
+    min-width: 218.12px;
+    min-height: 59px;
+    max-height: 59px;
+    grid-template-columns: 39px 1fr 39px;
+    grid-template-rows: 1fr 15px;
+
+    place-items: center start;
+    color: inherit;
+
+    padding: 10px;
+    margin-top: 4px;
+    text-decoration: none;
+    transition: 0.1s;
+    border-radius: 40px;
+}
+
+.profile-button:hover {
+    background: rgba(121, 75, 196, 0.10);
+    /*    color: rgb(121, 75, 196);*/
+}
+
+.profile-button > img {
+    height: 39px;
+    width: 39px;
+    grid-row-start: 1;
+    grid-row-end: span 2;
+}
+
+.profile-button > #name {
+    margin-left: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.profile-button > #username {
+    margin-left: 10px;
+    grid-row-start: 2;
+    grid-column-start: 2;
+    font-size: 15px;
+    color: #8899A6;
+}
+
+.dropdown-icon {
+    grid-column-start: 3;
+    grid-row-start: 1;
+    grid-row-end: span 2;
+    place-self: center end;
+    height: 18.75px;
+    width: 18.75px;
+    fill: #eee;
+}
+
+main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /*    place-items: center center;*/
+}
+
+header > h1 {
+    font-size: 19px;
+    font-weight: 900;
+    padding: 15px;
+}
+
+hr {
+    border-color: rgb(56, 68, 77);
+}
+
+.get-user-section {
+    display: grid;
+    place-items: center center;
+}
+
+.get-user-section > p {
+    color: #8899A6;
+}
+
+.get-user-button {
+    width: 196.58px;
+    height: 49px;
+    color: inherit;
     background: rgb(121, 75, 196);
-    min-width: 30px;
-    min-height: 30px;
-    border: 2px solid rgb(25, 32, 43);
-    width: auto;
-    height: auto;
-    margin: 0;
-    border-radius: 50%;
-    position:absolute;
-    bottom: 105px;
-    left: 50px;
-    margin: 0;
-    padding: 6px 0 0; /*adds a top padding of 6px*/
-    /*    padding-bottom: 5px;*/
+
+    padding: 10px;
+    margin-top: 4px;
+    text-decoration: none;
+    transition: 0.1s;
+    border-radius: 40px;
+    border: none;
 }
 
-/*This extends the previous badge class so it inherits the other properties*/
-.message{
-    position: absolute;
-    bottom: 45px;
+.get-user-button:hover {
+    background: rgb(134, 93, 202);
+    cursor: pointer;
 }
+
+.get-user-button > p {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.retrieved-user > .profile-button {
+    border: 1px solid rgb(121, 75, 196);
+    grid-template-columns: 39px 1fr;
+}
+
+.profile-button > #retrieved-pfp {
+    height: 39px;
+    width: 39px;
+    grid-row-start: 1;
+    grid-row-end: span 2;
+}
+
+.profile-button > #retrieved-name {
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.profile-button > #retrieved-username {
+    margin-left: 20px;
+    margin-right: 20px;
+    grid-row-start: 2;
+    grid-column-start: 2;
+    font-size: 15px;
+    color: #8899A6;
+}
+
+.home-heading {
+    display: grid;
+    grid: 1fr / 1fr 200px 1fr;
+}
+
+/*!*This container holds the main page content*!*/
+/*.notif-container{*/
+/*    margin-left: 0;*/
+/*    padding-left: 0;*/
+/*    margin-right: 0;*/
+/*    padding-right: 0;*/
+/*    border-left: 1px solid;*/
+/*    border-right: 1px solid;*/
+/*    border-color: rgb(56, 68, 77)*/
+/*}*/
+
+/*.notif-container h1, form{*/
+/*    padding-left: 20px;*/
+/*}*/
+
+/*!*This container holds the header/navbar *!*/
+/*.home-header{*/
+/*    height: 100%;*/
+/*    min-width: 200px;*/
+/*    max-width: 250px;*/
+/*    !*    z-index: 3;*!*/
+/*    top: 10px;*/
+/*    left: 0;*/
+/*    !*    overflow-x: hidden;*!*/
+/*    margin: 0;*/
+/*    !*    padding-top: 40px;*!*/
+/*    padding-left: 0;*/
+/*    padding-right: 0;*/
+
+/*}*/
+
+/*!*The Nav-Links class is an extension of the header class*/
+/*    It will inherit the height and width of the header class*!*/
+/*.home-header .nav-links{*/
+/*    display: flex; !* Sets to a Flex box *!*/
+/*    flex-direction: column;*/
+/*    justify-content: space-evenly; !* Evenly spaces each of the nav items*!*/
+/*    align-items: flex-start;*/
+/*    padding-top: 1px;*/
+
+/*}*/
+
+/*.btn {*/
+/*    border: 0;*/
+/*    border-radius: 40px;*/
+/*    background-color: rgb(121, 75, 196);*/
+/*    color: white;*/
+/*}*/
+
+/*.connect, .disconnect {*/
+/*    border-radius: 5px;*/
+/*}*/
+
+/*.connect:hover {*/
+/*    background-color: rgb(134, 93, 202);*/
+/*    color: white;*/
+/*}*/
+
+/*!*Holds the style for each link*!*/
+/*.nav-option{*/
+/*    display: flex;*/
+/*    flex-direction: row; !* makes items in the flex align in a row *!*/
+/*    align-items: baseline; !* aligns the icon and text on the same line vertically *!*/
+/*    padding-top: 10px;*/
+/*    !*    border-radius: 40px;*!*/
+/*    background-color: rgb(25, 32, 43);*/
+
+/*}*/
+
+/*!*To adjust the hover properties on children of a class*/
+/*    We must create separate CSS sections for them*!*/
+
+/*!*Parent Hover properties*!*/
+/*.nav-option:hover {*/
+/*    background-color: rgba(121, 75, 196, .10);*/
+/*    color: rgb(121, 75, 196);*/
+
+/*}*/
+
+/*!*Child Hover properties: Text*!*/
+/*.nav-option:hover .option-text{*/
+/*    color: rgb(121, 75, 196);*/
+/*}*/
+
+/*!*Child Hover properties: icon*!*/
+/*.nav-option:hover i{*/
+/*    color: rgb(121, 75, 196);*/
+/*}*/
+
+/*!*Child CSS properties: text*!*/
+/*.nav-option .option-text{*/
+/*    font-family: inherit;*/
+/*    font-size: 22px;*/
+/*    margin-left: 25px;*/
+/*    margin-bottom: 0;*/
+/*    padding-bottom: 10px;*/
+/*}*/
+
+/*!*Child CSS properties: icons*!*/
+/*.nav-option i{*/
+/*    color: white;*/
+/*}*/
+
+/*!*Notification badge*!*/
+/*.badge{*/
+/*    background: rgb(121, 75, 196);*/
+/*    min-width: 30px;*/
+/*    min-height: 30px;*/
+/*    border: 2px solid rgb(25, 32, 43);*/
+/*    width: auto;*/
+/*    height: auto;*/
+/*    margin: 0;*/
+/*    border-radius: 50%;*/
+/*    position:absolute;*/
+/*    bottom: 105px;*/
+/*    left: 50px;*/
+/*    margin: 0;*/
+/*    padding: 6px 0 0; !*adds a top padding of 6px*!*/
+/*    !*    padding-bottom: 5px;*!*/
+/*}*/
+
+/*!*This extends the previous badge class so it inherits the other properties*!*/
+/*.message{*/
+/*    position: absolute;*/
+/*    bottom: 45px;*/
+/*}*/
