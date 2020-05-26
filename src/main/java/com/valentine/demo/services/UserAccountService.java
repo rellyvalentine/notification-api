@@ -1,5 +1,6 @@
 package com.valentine.demo.services;
 
+import com.valentine.demo.DemoApplication;
 import com.valentine.demo.dao.UserAccountRepository;
 import com.valentine.demo.entities.UserAccount;
 import com.valentine.demo.security.UserAccountDetails;
@@ -9,12 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserAccountService implements UserDetailsService {
@@ -51,6 +54,15 @@ public class UserAccountService implements UserDetailsService {
 
     public List<UserAccount> getAllUsers(){
         return userAccountRepo.findAll();
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
+    public UserAccount getRandomUser() {
+        List<UserAccount> users = getAllUsers();
+        Random rand = new Random(); //get a random index from the list
+        UserAccount user = users.get(rand.nextInt(users.size()));
+        DemoApplication.logger.debug("User accessed: "+user);
+        return user;
     }
 
     @Transactional

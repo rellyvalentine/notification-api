@@ -57,11 +57,7 @@ public class RetrieveController {
     public UserAccount getRandomUser(Principal principal) throws Exception {
 
         Thread.sleep(1000);
-
-        List<UserAccount> users = userService.getAllUsers();
-        Random rand = new Random(); //get a random index from the list
-        DemoApplication.logger.debug("User accessed: "+users.get(rand.nextInt(users.size())).getUserName());
-        return users.get(rand.nextInt(users.size()));
+        return userService.getRandomUser();
     }
 
 

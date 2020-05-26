@@ -42,9 +42,9 @@ public class HomeController {
     @GetMapping("/home")
     public String userHome(Model model){
         UserAccount user = accountService.getLoggedInUserAccount();
-        List<Notification> notifications = notificationService.getNewNotifications(user.getUserId());
+        List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
         model.addAttribute("user", user);
-        model.addAttribute("notifications", notifications);
+        model.addAttribute("newNotifications", newNotifications);
 
         return "/user-home";
     }
@@ -53,16 +53,21 @@ public class HomeController {
     public String userNotifications(Model model){
         UserAccount user = accountService.getLoggedInUserAccount();
         List<Notification> notifications = notificationService.getAllNotificationsByUserId(user.getUserId());
+        List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
+        model.addAttribute("user", user);
         model.addAttribute("notifications", notifications);
+        model.addAttribute("newNotifications", newNotifications);
         return "/notifications";
     }
 
     @GetMapping("/profile")
     public String userProfile(Model model) {
         UserAccount user = accountService.getLoggedInUserAccount();
+        List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
         UserPfpDTO updateUser = new UserPfpDTO();
         model.addAttribute("user", user);
         model.addAttribute("updateUser", updateUser);
+        model.addAttribute("newnotifications", newNotifications);
         return "/profile";
     }
 

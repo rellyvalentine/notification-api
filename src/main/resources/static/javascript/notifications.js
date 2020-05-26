@@ -6,7 +6,7 @@ const filterId = function(stringId){
 };
 
 //updating if a notification has been seen/read
-const newNotifications = document.getElementsByClassName("newNotif"); //retrieves all notifications
+const newNotifications = document.getElementsByClassName("new-notif"); //retrieves all notifications
 
 console.log(`Notifications: ${newNotifications.length}`);
 
@@ -19,8 +19,10 @@ for (let notification of newNotifications){
         const notificationId = filterId(notification.id); //get the Notification's id
 
         //get the badge from the HTML and hide it once clicked
-        const badge = document.getElementById(`newBadge${notificationId}`);
-        badge.hidden = true;
+        // const badge = document.getElementById(`newBadge${notificationId}`);
+        // badge.hidden = true;
+
+        document.getElementById(`newNotif${notificationId}`).style.background = "rgb(21, 32, 43)";
 
         const url = "http://localhost:8080/api-v1/read-notif";
         const xhr = new XMLHttpRequest();

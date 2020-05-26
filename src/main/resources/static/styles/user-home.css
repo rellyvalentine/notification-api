@@ -86,7 +86,30 @@ img {
 */
 
 .navbar-icon {
+    grid-area: 1 / 1 / 2 / 2;
     fill: #eee;
+}
+
+.notif-number {
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    position: relative;
+    top: -10px;
+    right: -12px;
+
+    font-size: 11px;
+    font-weight: 600;
+    width: 18.5px;
+    height: 18.5px;
+    white-space: nowrap;
+    overflow-wrap: break-word;
+    place-items: center center;
+    place-content: center center;
+
+    border: 1px solid rgb(21, 32, 42);
+    border-radius: 100%;
+    background: rgb(121, 75, 196);
+    color: #eee;
 }
 
 .nav-option:hover {

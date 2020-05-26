@@ -19,15 +19,10 @@ html {
 body {
     display: grid;
     grid: 'sidebar main' 1fr / 402px 1fr;
-
 }
 
 .theme-color {
     color: rgb(121, 75, 196);
-}
-
-img {
-    border-radius: 100%;
 }
 
 .sidebar-container {
@@ -186,138 +181,127 @@ img {
 }
 
 main {
-    grid-area: main;
     width: 100%;
-    display: grid;
+    overflow-y: scroll;
 }
 
-.edit-profile-container {
+.notif-container {
     width: 600px;
-    height: 650px;
-    border: 1px solid rgb(56, 68, 77);
-    place-self: center center;
-    border-radius: 20px;
+    height: 100%;
+    border-right: solid 1px rgb(56, 68, 77);
 }
 
-form {
+.notif-container > header {
     display: grid;
-    grid: 53px 1fr / 1fr;
-}
-
-form > header {
-    display: grid;
-    grid: 1fr / 1fr 64.59px;
-    place-items: center start;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-bottom: 1px solid rgb(56, 68, 77);
+    grid-template-rows: 53px 52px;
+    border-bottom: solid 1.5px rgb(56, 68, 77);
 }
 
 header > h1 {
     font-size: 19px;
-    font-weight: 900;
+    font-weight: 800;
+    padding: 15px;
 }
 
-header > button {
+.notif-view-option {
+    display: grid;
+    padding: 15px;
     font-size: 15px;
-    font-weight: 900;
-    max-height: 30px;
-    min-height: 30px;
-    min-width: 64.59px;
-    max-width: 64.59px;
-    background: rgb(121, 75, 196);
-    border: none;
-    border-radius: 15px;
-    color: #eee;
-    transition: 0.2s;
-}
-
-button:hover {
-    background: rgb(134, 93, 202);
-    cursor: pointer;
-}
-
-.profile-form {
-    display: grid;
-    grid-row-gap: 10px;
-    padding: 10px 15px;
-}
-
-.profile-form > img {
-    grid-area: 1 / 1 / 2 / 2;
-    width: 112px;
-    height: 112px;
-    border-radius: 100%;
-    opacity: 85%;
-}
-
-.upload-pfp {
-    grid-area: 1 / 1 / 2 / 2;
-    display: grid;
-    margin-top: 35px;
-    margin-left: 35px;
-    border-radius: 100%;
-    /*    border: 1px solid white;*/
-    width: 37px;
-    height: 37px;
+    font-weight: 600;
+    place-items: center center;
+    color: rgb(121, 75, 196);
+    border-bottom: solid 1px rgb(121, 75, 196);
     transition: .2s;
 }
 
-.upload-pfp > svg {
-    grid-area: 1 / 1 / 2 / 2;
-    height: 22px;
-    width: 22px;
-    margin-left: 6.75px;
-    margin-top: 6.75px;
-    fill: #eee;
-    opacity: 80%;
+.notif-view-option:hover {
+    cursor: pointer;
+    background: rgba(121, 75, 196, 0.10);
 }
 
-.upload-pfp input[type=file] {
-    /*    font-size: 100px;*/
-    /*    position: absolute;*/
-    grid-area: 1 / 1 / 2 / 2;
-    left: 0;
-    top: 0;
-    opacity: 0;
+.notif-list {
+    display: flex;
+    flex-direction: row;
 }
 
-.upload-pfp:hover {
-    background: rgba(255, 255, 255, .45);
+.notification {
+    display: grid;
+    grid: 1fr 1fr 1fr/ 49px 1fr auto;
+    padding: 10px 15px;
+    width: 598px;
+    height: 108.4px;
+    border-top: solid 1px rgb(56, 68, 77);
+    border-bottom: solid 1px rgb(56, 68, 77);
+    transition: .2s;
 }
 
-.input-container {
-    height: 56.8px;
-    background: rgb(25, 39, 52);
-    border-radius: 3px;
-    border-bottom: 2px solid rgb(136, 153, 166);
-    padding-left: 10px;
+.liked-icon {
+    fill: rgb(224, 36, 94);
+    grid-area: 1 / 1 / span 3 / 2;
+    height: 30px;
+    width: 30px;
 }
 
-.input-container > p {
+.notification > img {
+    grid-area: 1 / 2;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+}
+
+.notification > .header {
+    grid-area: 2 / 2 / auto / auto;
+    place-self: center start;
+}
+
+.notification > .date {
+    width: fit-content;
+    grid-area: 1 / 3;
+    justify-self: end;
     font-size: 15px;
     color: #8899A6;
 }
 
-.input-container > input {
+.notification > .description {
+    grid-area: 3 / 2;
+    place-self: center start;
+    font-size: 15px;
+    color: #8899A6;
+}
+
+.notification:hover {
+    cursor: pointer;
     background: rgb(25, 39, 52);
-    border: none;
-    outline: none;
-    font-size: 19px;
-    color: #eee;
-    padding-top: 3px;
-    padding-bottom: 2px;
 }
 
-input::placeholder {
-    font-size: 19px;
-    color: #eee;
+.new-notif {
+    background: rgba(121, 75, 196, 0.12);
 }
 
-.input-container:focus-within {
-    border-bottom: 2px solid rgb(121, 75, 196);
-}
 
-.input-container:focus-within > p {
-    color: rgb(121, 75, 196);
-}
+
+/*.icon-wrapper{*/
+/*    position: relative;*/
+/*    float: right;*/
+/*}*/
+
+/*.notification{*/
+/*    background-color: rgb(25, 32, 43);*/
+/*    border-color: rgb(56, 68, 77);*/
+/*    color: white*/
+/*}*/
+
+/*.notification:hover{*/
+/*    background-color: rgb(25, 39, 52);*/
+/*}*/
+
+/*.list-container{*/
+/*    display: flex;*/
+/*}*/
+
+/*.fas {*/
+/*    margin-bottom: auto;*/
+/*    margin-top: auto;*/
+/*    padding-right: 10px;*/
+/*    color: deepskyblue;*/
+/*}*/

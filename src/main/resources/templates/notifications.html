@@ -3,68 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <title>Notifications</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{styles/notification.css}" href="styles/notification.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/0142ea973b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" media="screen" th:href="@{styles/notifications.css}" href="styles/notifications.css">
 </head>
-<body style="background-color: rgb(25, 32, 43); color: white">
+<body>
 
-<div class="container pt-3">
-    <h1>Notification API Beta</h1>
-    <hr style="border-color: rgb(56, 68, 77)">
+<aside class="sidebar-container">
+    <div class="navbar">
+        <h1>Notification API Beta</h1>
+        <div class="nav-links">
+            <a th:href="@{/home}" href="#" role="link" class="btn nav-option">
+                <svg class="navbar-icon" viewBox="0 0 24 24">
+                    <g>
+                        <path d="M22.46 7.57L12.357 2.115c-.223-.12-.49-.12-.713 0L1.543 7.57c-.364.197-.5.652-.303 1.017.135.25.394.393.66.393.12 0 .243-.03.356-.09l.815-.44L4.7 19.963c.214 1.215 1.308 2.062 2.658 2.062h9.282c1.352 0 2.445-.848 2.663-2.087l1.626-11.49.818.442c.364.193.82.06 1.017-.304.196-.363.06-.818-.304-1.016zm-4.638 12.133c-.107.606-.703.822-1.18.822H7.36c-.48 0-1.075-.216-1.178-.798L4.48 7.69 12 3.628l7.522 4.06-1.7 12.015z"></path>
+                        <path d="M8.22 12.184c0 2.084 1.695 3.78 3.78 3.78s3.78-1.696 3.78-3.78-1.695-3.78-3.78-3.78-3.78 1.696-3.78 3.78zm6.06 0c0 1.258-1.022 2.28-2.28 2.28s-2.28-1.022-2.28-2.28 1.022-2.28 2.28-2.28 2.28 1.022 2.28 2.28z"></path>
+                    </g>
+                </svg>
+                <p class="option-text"><strong>Home</strong></p>
+            </a>
+            <a th:href="@{/notifications}" href="#" class="btn nav-option current-page" role="link">
+                <div id="notif-number" class="notif-number" th:if="${newNotifications.size()} > 0" th:text="${newNotifications.size()}"></div>
+                <div id="no-notif" class="notif-number" th:unless="${newNotifications.size()} > 0" th:text="${newNotifications.size()}" style="display: none"></div>
+                <svg class="navbar-icon current-page" viewBox="0 0 24 24">
+                    <g>
+                        <path d="M21.697 16.468c-.02-.016-2.14-1.64-2.103-6.03.02-2.533-.812-4.782-2.347-6.334-1.375-1.393-3.237-2.164-5.242-2.172h-.013c-2.004.008-3.866.78-5.242 2.172-1.534 1.553-2.367 3.802-2.346 6.333.037 4.332-2.02 5.967-2.102 6.03-.26.194-.366.53-.265.838s.39.515.713.515h4.494c.1 2.544 2.188 4.587 4.756 4.587s4.655-2.043 4.756-4.587h4.494c.324 0 .61-.208.712-.515s-.005-.644-.265-.837zM12 20.408c-1.466 0-2.657-1.147-2.756-2.588h5.512c-.1 1.44-1.29 2.587-2.756 2.587z"></path>
+                    </g>
+                </svg>
 
-    <div class="list-group" th:each="notification : ${notifications}">
+                <p class="option-text"><strong>Notifications</strong></p>
+            </a>
 
-        <a type="button" class="btn list-group-item list-group-item-action align-items-start list-container notification newNotif" data-toggle="modal" th:attr="data-target='#notificationModal'+${notification.id}" th:if="${notification.new}"
-           th:id="'newNotif'+${notification.id}">
-            <i th:id="'newBadge'+${notification.id}" class="fas fa-circle"></i>
-            <div class="flex-column w-100">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1" th:text="${notification.head}"></h5>
-                    <small class="text-muted" th:text="${notification.date}"></small>
-                </div>
-                <p class="mb-1" th:text="${notification.body}"></p>
-                <small class="text-muted">Donec id elit non mi porta.</small>
+            <a th:href="@{/messages}" href="#" class="btn nav-option" role="link">
+                <svg class="navbar-icon" viewBox="0 0 24 24">
+                    <g>
+                        <path d="M19.25 3.018H4.75C3.233 3.018 2 4.252 2 5.77v12.495c0 1.518 1.233 2.753 2.75 2.753h14.5c1.517 0 2.75-1.235 2.75-2.753V5.77c0-1.518-1.233-2.752-2.75-2.752zm-14.5 1.5h14.5c.69 0 1.25.56 1.25 1.25v.714l-8.05 5.367c-.273.18-.626.182-.9-.002L3.5 6.482v-.714c0-.69.56-1.25 1.25-1.25zm14.5 14.998H4.75c-.69 0-1.25-.56-1.25-1.25V8.24l7.24 4.83c.383.256.822.384 1.26.384.44 0 .877-.128 1.26-.383l7.24-4.83v10.022c0 .69-.56 1.25-1.25 1.25z"></path>
+                    </g>
+                </svg>
+                <p class="option-text"><strong>Message</strong></p>
+            </a>
+
+            <a th:href="@{/profile}" href="#" class="btn nav-option" role="link">
+                <svg class="navbar-icon" viewBox="0 0 24 24">
+                    <g>
+                        <path d="M12.225 12.165c-1.356 0-2.872-.15-3.84-1.256-.814-.93-1.077-2.368-.805-4.392.38-2.826 2.116-4.513 4.646-4.513s4.267 1.687 4.646 4.513c.272 2.024.008 3.46-.806 4.392-.97 1.106-2.485 1.255-3.84 1.255zm5.849 9.85H6.376c-.663 0-1.25-.28-1.65-.786-.422-.534-.576-1.27-.41-1.968.834-3.53 4.086-5.997 7.908-5.997s7.074 2.466 7.91 5.997c.164.698.01 1.434-.412 1.967-.4.505-.985.785-1.648.785z"></path>
+                    </g>
+                </svg>
+                <p class="option-text"><strong>Profile</strong></p>
+            </a>
+
+            <a th:href="@{/more}" href="#" class="btn nav-option" role="link">
+                <svg class="navbar-icon" viewBox="0 0 24 24">
+                    <g>
+                        <path d="M16.5 10.25c-.965 0-1.75.787-1.75 1.75s.784 1.75 1.75 1.75c.964 0 1.75-.786 1.75-1.75s-.786-1.75-1.75-1.75zm0 2.5c-.414 0-.75-.336-.75-.75 0-.413.337-.75.75-.75s.75.336.75.75c0 .413-.336.75-.75.75zm-4.5-2.5c-.966 0-1.75.787-1.75 1.75s.785 1.75 1.75 1.75 1.75-.786 1.75-1.75-.784-1.75-1.75-1.75zm0 2.5c-.414 0-.75-.336-.75-.75 0-.413.337-.75.75-.75s.75.336.75.75c0 .413-.336.75-.75.75zm-4.5-2.5c-.965 0-1.75.787-1.75 1.75s.785 1.75 1.75 1.75c.964 0 1.75-.786 1.75-1.75s-.787-1.75-1.75-1.75zm0 2.5c-.414 0-.75-.336-.75-.75 0-.413.337-.75.75-.75s.75.336.75.75c0 .413-.336.75-.75.75z"></path>
+                        <path d="M12 22.75C6.072 22.75 1.25 17.928 1.25 12S6.072 1.25 12 1.25 22.75 6.072 22.75 12 17.928 22.75 12 22.75zm0-20C6.9 2.75 2.75 6.9 2.75 12S6.9 21.25 12 21.25s9.25-4.15 9.25-9.25S17.1 2.75 12 2.75z"></path>
+                    </g>
+                </svg>
+                <p class="option-text"><strong>More</strong></p>
+            </a>
+        </div>
+        <div class="profile-container">
+            <a href="#" class="profile-button">
+                <img th:src="${user.pfp}">
+                <p id="name" th:text="${user.name}"></p>
+                <p id="username" th:text="'@'+${user.userName}"></p>
+                <svg class="dropdown-icon" viewBox="0 0 24 24">
+                    <g>
+                        <path d="M20.207 8.147c-.39-.39-1.023-.39-1.414 0L12 14.94 5.207 8.147c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l7.5 7.5c.195.196.45.294.707.294s.512-.098.707-.293l7.5-7.5c.39-.39.39-1.022 0-1.413z"></path>
+                    </g>
+                </svg>
+            </a>
+        </div>
+    </div>
+</aside>
+
+<main>
+    <section class="notif-container">
+        <header>
+            <h1>Notifications</h1>
+            <div class="notif-view-option">
+                All
             </div>
-            <input id="notifId" type="hidden" th:value="${notification.id}">
-        </a>
-
-        <a type="button" class="btn list-group-item list-group-item-action-item align-items-start list-container notification" data-toggle="modal" th:attr="data-target='#notificationModal'+${notification.id}" th:unless="${notification.new}"
-           id="oldNotif" th:id="oldNotif">
-            <div class="flex-column w-100">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1" th:text="${notification.head}"></h5>
-                    <small class="text-muted" th:text="${notification.date}"></small>
-                </div>
-                <div style="text-align: left">
-                    <p class="mb-1" th:text="${notification.body}" style="text-align: left"></p>
-                    <p class="text-muted" style="font-size: small">Donec id elit non mi porta.</p>
-                </div>
+        </header>
+        <div class="notif-list" th:each="notification : ${notifications}">
+            <div class="notification new-notif" th:if="${notification.new}" th:id="'newNotif'+${notification.id}">
+                <svg viewBox="0 0 24 24" class="liked-icon">
+                    <g>
+                        <path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path>
+                    </g>
+                </svg>
+                <img th:src="@{default-images/default-profile.png}" alt="default">
+                <h3 class="header" th:text="${notification.head}"></h3>
+                <p class="description" th:text="${notification.body}"></p>
+                <p class="date" th:text="${notification.date}"></p>
             </div>
-        </a>
 
-        <!--  the modals  -->
-        <div class="modal fade" th:id="'notificationModal'+${notification.id}" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: rgb(25, 32, 43); border-color: rgb(106, 121, 145)">
-                        <h4 class="modal-title" th:text="${notification.head}"></h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body" style="background-color: rgb(25, 32, 43); border-color: rgb(106, 121, 145)">
-                        <h6 th:text="${notification.body}"></h6>
-                    </div>
-                </div>
+            <div class="notification" th:unless="${notification.new}" th:id="'oldNotif'+${notification.id}">
+                <svg viewBox="0 0 24 24" class="liked-icon">
+                    <g>
+                        <path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path>
+                    </g>
+                </svg>
+                <img th:src="@{default-images/default-profile.png}" alt="default">
+                <h3 class="header" th:text="${notification.head}"></h3>
+                <p class="description" th:text="${notification.body}"></p>
+                <p class="date" th:text="${notification.date}"></p>
             </div>
         </div>
-
-    </div>
-
-</div>
-
+    </section>
+</main>
 </body>
-<script src="javascript/home.js" th:src="@{/javascript/notification.js}"></script>
-
+<script src="javascript/notifications.js" th:src="@{/javascript/notifications.js}"></script>
 </html>
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Notifications</title>-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+<!--    <link rel="stylesheet" th:href="@{styles/notifications.css}" href="styles/notifications.css">-->
+<!--    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+<!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>-->
+<!--    <script src="https://kit.fontawesome.com/0142ea973b.js" crossorigin="anonymous"></script>-->
+<!--</head>-->
+<!--<body style="background-color: rgb(25, 32, 43); color: white">-->
+
+<!--<div class="container pt-3">-->
+<!--    <h1>Notification API Beta</h1>-->
+<!--    <hr style="border-color: rgb(56, 68, 77)">-->
+
+<!--    <div class="list-group" th:each="notification : ${notifications}">-->
+
+<!--        <a type="button" class="btn list-group-item list-group-item-action align-items-start list-container notification newNotif" data-toggle="modal" th:attr="data-target='#notificationModal'+${notification.id}" th:if="${notification.new}"-->
+<!--           th:id="'newNotif'+${notification.id}">-->
+<!--            <i th:id="'newBadge'+${notification.id}" class="fas fa-circle"></i>-->
+<!--            <div class="flex-column w-100">-->
+<!--                <div class="d-flex w-100 justify-content-between">-->
+<!--                    <h5 class="mb-1" th:text="${notification.head}"></h5>-->
+<!--                    <small class="text-muted" th:text="${notification.date}"></small>-->
+<!--                </div>-->
+<!--                <p class="mb-1" th:text="${notification.body}"></p>-->
+<!--                <small class="text-muted">Donec id elit non mi porta.</small>-->
+<!--            </div>-->
+<!--            <input id="notifId" type="hidden" th:value="${notification.id}">-->
+<!--        </a>-->
+
+<!--        <a type="button" class="btn list-group-item list-group-item-action-item align-items-start list-container notification" data-toggle="modal" th:attr="data-target='#notificationModal'+${notification.id}" th:unless="${notification.new}"-->
+<!--           id="oldNotif" th:id="oldNotif">-->
+<!--            <div class="flex-column w-100">-->
+<!--                <div class="d-flex w-100 justify-content-between">-->
+<!--                    <h5 class="mb-1" th:text="${notification.head}"></h5>-->
+<!--                    <small class="text-muted" th:text="${notification.date}"></small>-->
+<!--                </div>-->
+<!--                <div style="text-align: left">-->
+<!--                    <p class="mb-1" th:text="${notification.body}" style="text-align: left"></p>-->
+<!--                    <p class="text-muted" style="font-size: small">Donec id elit non mi porta.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </a>-->
+
+<!--        &lt;!&ndash;  the modals  &ndash;&gt;-->
+<!--        <div class="modal fade" th:id="'notificationModal'+${notification.id}" role="dialog">-->
+<!--            <div class="modal-dialog">-->
+<!--                <div class="modal-content">-->
+<!--                    <div class="modal-header" style="background-color: rgb(25, 32, 43); border-color: rgb(106, 121, 145)">-->
+<!--                        <h4 class="modal-title" th:text="${notification.head}"></h4>-->
+<!--                        <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body" style="background-color: rgb(25, 32, 43); border-color: rgb(106, 121, 145)">-->
+<!--                        <h6 th:text="${notification.body}"></h6>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+
+<!--</div>-->
+
+<!--</body>-->
+
+
+<!--</html>-->

@@ -1,5 +1,6 @@
 package com.valentine.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.valentine.demo.entities.messaging.Chat;
 import com.valentine.demo.entities.messaging.Message;
@@ -33,6 +34,7 @@ public class UserAccount {
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
             fetch = FetchType.LAZY)
     @JoinTable(name = "user_chat", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="chat_id"))
+    @JsonIgnore //temporary if this causes errors when implementing chat
     private List<Chat> chats;
 
     public long getUserId() {
