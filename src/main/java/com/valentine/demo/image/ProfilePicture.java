@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "profile_picture")
-public class Image {
+public class ProfilePicture {
 
     @Id
     @Column(name = "user_id")

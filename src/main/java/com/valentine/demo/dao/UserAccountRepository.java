@@ -16,12 +16,12 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
 
     Optional<UserAccount> findUserAccountByUserName(String s);
 
-    @Query(nativeQuery = true, value = "SELECT user_id, username, password, role " +
+    @Query(nativeQuery = true, value = "SELECT user_id, username, password, role, name, pfp " +
             "FROM user_accounts " +
             "WHERE username = ?1")
     UserAccount getUserAccountByUserName(String username);
 
-    @Query(nativeQuery = true, value = "SELECT user_id, username, password, role " +
+    @Query(nativeQuery = true, value = "SELECT user_id, username, password, role, name, pfp " +
             "FROM user_accounts " +
             "WHERE user_id = ?1")
     UserAccount getUserAccountById(long id);

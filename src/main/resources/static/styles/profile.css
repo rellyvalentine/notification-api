@@ -1,0 +1,299 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    font-family: "Segoe UI";
+    background: rgb(21, 32, 43);
+    color: #eee;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body {
+    display: grid;
+    grid: 'sidebar main' 1fr / 402px 1fr;
+
+}
+
+.theme-color {
+    color: rgb(121, 75, 196);
+}
+
+img {
+    border-radius: 100%;
+}
+
+.sidebar-container {
+    grid-area: sidebar;
+    display: grid;
+    max-width: 402px;
+    /*    padding-right: 20px;*/
+    border-right: 1px solid rgb(56, 68, 77);
+
+}
+
+.navbar {
+    display: flex;
+    flex-direction: column;
+    justify-self: end;
+    height: 99%;
+    max-width: 275px;
+    min-width: 275px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.navbar > h1 {
+    max-height: 53px;
+    font-size: 22px;
+    margin-top: 10px;
+}
+
+.navbar > .nav-links {
+    margin-top: 20px;
+}
+
+.nav-option {
+    width: fit-content;
+    display: grid;
+    grid-template-columns: 26.25px 1fr;
+    grid-column-gap: 25px;
+    place-items: center start;
+    color: inherit;
+
+    padding: 10px;
+    margin-top: 4px;
+    text-decoration: none;
+    transition: 0.1s;
+    border-radius: 40px;
+}
+
+.nav-option > p{
+    font-size: 20px;
+}
+
+/*
+.nav-option > i {
+    font-size: 26px;
+}
+*/
+
+.navbar-icon {
+    fill: #eee;
+}
+
+.nav-option:hover {
+    background: rgba(121, 75, 196, 0.10);
+    color: rgb(121, 75, 196);
+}
+
+.nav-option:hover > .navbar-icon {
+    fill: rgb(121, 75, 196);
+}
+
+.current-page {
+    color: rgb(121, 75, 196);
+    fill: rgb(121, 75, 196);
+}
+
+.profile-container {
+    margin-top: auto;
+    margin-right: 0;
+}
+
+.profile-button {
+    display: grid;
+    min-width: 218.12px;
+    min-height: 59px;
+    max-height: 59px;
+    grid-template-columns: 39px 1fr 39px;
+    grid-template-rows: 1fr 15px;
+
+    place-items: center start;
+    color: inherit;
+
+    padding: 10px;
+    margin-top: 4px;
+    text-decoration: none;
+    transition: 0.1s;
+    border-radius: 40px;
+}
+
+.profile-button:hover {
+    background: rgba(121, 75, 196, 0.10);
+    /*    color: rgb(121, 75, 196);*/
+}
+
+.profile-button > img {
+    height: 39px;
+    width: 39px;
+    grid-row-start: 1;
+    grid-row-end: span 2;
+}
+
+.profile-button > #name {
+    margin-left: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.profile-button > #username {
+    margin-left: 10px;
+    grid-row-start: 2;
+    grid-column-start: 2;
+    font-size: 15px;
+    color: #8899A6;
+}
+
+.dropdown-icon {
+    grid-column-start: 3;
+    grid-row-start: 1;
+    grid-row-end: span 2;
+    place-self: center end;
+    height: 18.75px;
+    width: 18.75px;
+    fill: #eee;
+}
+
+main {
+    grid-area: main;
+    width: 100%;
+    display: grid;
+}
+
+.edit-profile-container {
+    width: 600px;
+    height: 650px;
+    border: 1px solid rgb(56, 68, 77);
+    place-self: center center;
+    border-radius: 20px;
+}
+
+form {
+    display: grid;
+    grid: 53px 1fr / 1fr;
+}
+
+form > header {
+    display: grid;
+    grid: 1fr / 1fr 64.59px;
+    place-items: center start;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-bottom: 1px solid rgb(56, 68, 77);
+}
+
+header > h1 {
+    font-size: 19px;
+    font-weight: 900;
+}
+
+header > button {
+    font-size: 15px;
+    font-weight: 900;
+    max-height: 30px;
+    min-height: 30px;
+    min-width: 64.59px;
+    max-width: 64.59px;
+    background: rgb(121, 75, 196);
+    border: none;
+    border-radius: 15px;
+    color: #eee;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: rgb(134, 93, 202);
+    cursor: pointer;
+}
+
+.profile-form {
+    display: grid;
+    grid-row-gap: 10px;
+    padding: 10px 15px;
+}
+
+.profile-form > img {
+    grid-area: 1 / 1 / 2 / 2;
+    width: 112px;
+    height: 112px;
+    border-radius: 100%;
+    opacity: 85%;
+}
+
+.upload-pfp {
+    grid-area: 1 / 1 / 2 / 2;
+    display: grid;
+    margin-top: 35px;
+    margin-left: 35px;
+    border-radius: 100%;
+    /*    border: 1px solid white;*/
+    width: 37px;
+    height: 37px;
+    transition: .2s;
+}
+
+.upload-pfp > svg {
+    grid-area: 1 / 1 / 2 / 2;
+    height: 22px;
+    width: 22px;
+    margin-left: 6.75px;
+    margin-top: 6.75px;
+    fill: #eee;
+    opacity: 80%;
+}
+
+.upload-pfp input[type=file] {
+    /*    font-size: 100px;*/
+    /*    position: absolute;*/
+    grid-area: 1 / 1 / 2 / 2;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.upload-pfp:hover {
+    background: rgba(255, 255, 255, .45);
+}
+
+.input-container {
+    height: 56.8px;
+    background: rgb(25, 39, 52);
+    border-radius: 3px;
+    border-bottom: 2px solid rgb(136, 153, 166);
+    padding-left: 10px;
+}
+
+.input-container > p {
+    font-size: 15px;
+    color: #8899A6;
+}
+
+.input-container > input {
+    background: rgb(25, 39, 52);
+    border: none;
+    font-size: 19px;
+    color: #eee;
+    padding-top: 3px;
+    padding-bottom: 2px;
+}
+
+input::placeholder {
+    font-size: 19px;
+    color: #eee;
+}
+
+.input-container:focus-within {
+    border-bottom: 2px solid rgb(121, 75, 196);
+}
+
+.input-container:focus-within > p {
+    color: rgb(121, 75, 196);
+}

@@ -49,6 +49,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/messages").hasAuthority("USER")
                 .antMatchers("/home").hasAuthority("USER")
                 .antMatchers("/notifications").hasAuthority("USER")
+                .antMatchers("/profile").hasAuthority("USER")
+                .antMatchers("/profile").hasAuthority("USER")
                 .antMatchers("/api-v1/read-notif").hasAuthority("USER")
                 .antMatchers("/","/**").permitAll()
                 .and()

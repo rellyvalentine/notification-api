@@ -9,7 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +21,9 @@ public class UserAccountService implements UserDetailsService {
 
     @Autowired
     UserAccountRepository userAccountRepo;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -45,6 +51,17 @@ public class UserAccountService implements UserDetailsService {
 
     public List<UserAccount> getAllUsers(){
         return userAccountRepo.findAll();
+    }
+
+    @Transactional
+    public void updateUser(UserAccount user) {
+        entityManager.createNativeQuery("UPDATE user_accounts " +
+                "SET name = ?, pfp = ?" +
+                "WHERE user_id = ?;")
+                .setParameter(1, user.getName())
+                .setParameter(2, user.getPfp())
+                .setParameter(3, user.getUserId())
+                .executeUpdate();
     }
 }
 

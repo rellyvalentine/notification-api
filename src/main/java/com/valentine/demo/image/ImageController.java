@@ -1,11 +1,8 @@
 package com.valentine.demo.image;
 
-import com.valentine.demo.DemoApplication;
 import com.valentine.demo.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +19,7 @@ import java.io.IOException;
 public class ImageController {
 
     @Autowired
-    ImageService imageService;
+    ProfilePictureService imageService;
 
     @Autowired
     UserAccountService userService;
@@ -38,7 +35,7 @@ public class ImageController {
             ImageIO.write(src, "png", destination);
         }
 
-        Image image = new Image();
+        ProfilePicture image = new ProfilePicture();
         image.setLocation(fileName);
         image.setId(pictureNumber);
         imageService.save(image);

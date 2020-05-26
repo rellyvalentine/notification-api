@@ -26,6 +26,10 @@ body {
     color: rgb(121, 75, 196);
 }
 
+img {
+    border-radius: 100%;
+}
+
 .sidebar-container {
     grid-area: sidebar;
     display: grid;

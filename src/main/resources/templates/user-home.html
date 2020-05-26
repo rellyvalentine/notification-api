@@ -12,7 +12,7 @@
     <div class="navbar">
         <h1>Notification API Beta</h1>
         <div class="nav-links">
-            <a th:href="@{/}" href="#" role="link" class="btn nav-option current-page">
+            <a th:href="@{/home}" href="#" role="link" class="btn nav-option current-page">
                 <!--                        <i class="fas fa-home fa-fw"></i>-->
                 <svg class="navbar-icon current-page" viewBox="0 0 24 24">
                     <g>
@@ -61,9 +61,9 @@
         </div>
         <div class="profile-container">
             <a href="#" class="profile-button">
-                <img th:src="@{default-images/profile-pic.png}" alt="Profile Picture">
-                <p id="name">Bartholemeu</p>
-                <p id="username">@sirflexallot</p>
+                <img th:src="${user.pfp}" alt="Profile Picture">
+                <p id="name" th:text="${user.name}"></p>
+                <p id="username" th:text="'@'+${user.userName}">@sirflexallot</p>
                 <svg class="dropdown-icon" viewBox="0 0 24 24">
                     <g>
                         <path d="M20.207 8.147c-.39-.39-1.023-.39-1.414 0L12 14.94 5.207 8.147c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l7.5 7.5c.195.196.45.294.707.294s.512-.098.707-.293l7.5-7.5c.39-.39.39-1.022 0-1.413z"></path>
@@ -90,7 +90,7 @@
         </form> <br>
         <div class="retrieved-user">
             <a href="#" class="profile-button">
-                <img id="retrieved-pfp" th:src="@{default-images/profile-pic.png}" alt="Bartholemeu">
+                <img id="retrieved-pfp" th:src="@{default-images/default-profile.png}" alt="Bartholemeu">
                 <p id="retrieved-name">Bartholemeu</p>
                 <p id="retrieved-username">@sirflexallot</p>
             </a>

@@ -22,8 +22,12 @@ public class UserAccount {
     private String userName;
     @Column(name = "password")
     private String password;
+    @Column(name = "name")
+    private String name;
     @Column(name = "role")
     private String role;
+    @Column(name = "pfp")
+    private String pfp;
 
     //this field represents the CHATS that a single USER is in
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
@@ -55,11 +59,35 @@ public class UserAccount {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getRole() {
         return role;
     }
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPfp() {
+        return pfp;
+    }
+
+    public void setPfp(String pfp) {
+        this.pfp = pfp;
+    }
+
+    public List<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(List<Chat> chats) {
+        this.chats = chats;
     }
 }
