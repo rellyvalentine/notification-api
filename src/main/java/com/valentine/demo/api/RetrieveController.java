@@ -39,18 +39,6 @@ public class RetrieveController {
     @Autowired
     SimpMessageSendingOperations sendingOperations;
 
-
-
-//    @GetMapping("/api-v1/retrieve")
-//    public Person getPerson(){
-//
-//        List<Person> people = personService.getAllPeople();
-//        Random rand = new Random(); //get a random index from the list
-//        long id = people.get(rand.nextInt(people.size())).getId(); //get the id of the random person
-//
-//        return personService.getPersonById(id);
-//    }
-
     @GetMapping("/api-v1-retrieve")
     @MessageMapping("/get-person")
     @SendToUser("/topic/random-user")
@@ -84,30 +72,9 @@ public class RetrieveController {
         DemoApplication.logger.debug("Currently Logged in:  "+userService.getLoggedInUserAccount().getUserName());
         DemoApplication.logger.debug("This notification is for: "+userService.getUserById(userId).getUserName());
 
-        Notification notification = new Notification();
-
-//        LocalDate current = LocalDate.now(); //gives us the current date WITHOUT TIME
-        ZonedDateTime current = ZonedDateTime.now(ZoneId.of("America/New_York")); //gives us the current date from time zone
-
-        //format the current time for the sql timestamp
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-        String currentDateString = current.format(formatter);
-//        DemoApplication.logger.debug(currentDateString); //for testing
-
-        Timestamp sqlDate = Timestamp.valueOf(currentDateString); //convert to sql
-
-        notification.setDate(sqlDate); //set the notification to the current time in SQL
-        notification.setUserId(userId);
-        notification.setHead("Random Access");
-        notification.setBody("You have been accessed by a random user");
-        notification.setNew(true);
-        notificationService.saveNotification(notification);
-
+        notificationService.createNewNotification(userId);
         //update the notification size of the user that is accessed
         sendingOperations.convertAndSendToUser(userService.getUserById(userId).getUserName(), "/queue/bell-new", notificationService.getNewNotifications(userId).size());
-
-        //return the new notifications for the logged in user
-//        return notificationService.getNewNotifications(userService.getLoggedInUserAccount().getUserId()).size();
     }
 
 //    @PostMapping("/api-v1/read-notif")

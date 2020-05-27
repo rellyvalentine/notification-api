@@ -8,6 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,13 +34,30 @@ public class NotificationService {
                 .collect(Collectors.toList()); //if a notification is new it will be collected
     }
 
-    public void saveNotification(Notification notification){
-        notificationStore.save(notification);
+    public void createNewNotification(long userId){
+
+        Notification notification = new Notification();
+//        LocalDate current = LocalDate.now(); //gives us the current date WITHOUT TIME
+        ZonedDateTime current = ZonedDateTime.now(ZoneId.of("America/New_York")); //gives us the current date from time zone
+
+        //format the current time for the sql timestamp
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+        String currentDateString = current.format(formatter);
+//        DemoApplication.logger.debug(currentDateString); //for testing
+
+        Timestamp sqlDate = Timestamp.valueOf(currentDateString); //convert to sql
+
+        notification.setDate(sqlDate); //set the notification to the current time in SQL
+        notification.setUserId(userId);
+        notification.setHead("Random Access");
+        notification.setBody("You have been accessed by a random user");
+        notification.setNew(true);
+        saveNotification(notification);
     }
 
-//    public Notification getNotificationById(long id){
-//        return notificationStore.findById(id);
-//    }
+    private void saveNotification(Notification notification){
+        notificationStore.save(notification);
+    }
 
     @PersistenceContext
     EntityManager entityManager;
