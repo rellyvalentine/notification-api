@@ -38,7 +38,14 @@ const filterId = function(stringId) {
         notification.addEventListener('click', () =>{
             console.log(`${notification.id} clicked`);
             let notificationId = filterId(notification.id);
-            document.getElementById(`newNotif${notificationId}`).style.background = "rgb(21, 32, 43)";
+            let notifElement = document.getElementById(`newNotif${notificationId}`);
+            notifElement.style.background = "rgb(21, 32, 43)";
+            notifElement.onmouseover = function() {
+                notifElement.style.background = "rgb(25, 39, 52)";
+            };
+            notifElement.onmouseout = function() {
+                notifElement.style.background = "rgb(21, 32, 43)";
+            };
 
             stompClient.send("/app/read-notif", {}, notificationId);
         });

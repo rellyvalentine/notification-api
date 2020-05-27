@@ -191,7 +191,8 @@ img {
 
 .notif-container {
     width: 600px;
-    height: 100%;
+    min-height: 100%;
+    max-height: max-content;
     border-right: solid 1px rgb(56, 68, 77);
 }
 
@@ -281,7 +282,6 @@ header > h1 {
 .new-notif {
     background: rgba(121, 75, 196, 0.12);
 }
-
 
 
 /*.icon-wrapper{*/
