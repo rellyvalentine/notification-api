@@ -37,7 +37,7 @@ async function connect() {
                 showUser(user);
             });
 
-            stompClient.subscribe('/user/queue/bell', function (message) {
+            stompClient.subscribe('/user/queue/bell-new', function (message) {
                 console.log("bell reached"+message);
                 updateBell(message.body);
             });
@@ -90,9 +90,10 @@ function updateBell(size) {
 }
 
 $(function () {
-    // $("form").on('submit', function (e) {
-    //     e.preventDefault();
-    // });
+    //prevents the page from refreshing on button click
+    $("form").on('submit', function (e) {
+        e.preventDefault();
+    });
     // $( "#connect" ).click(function() { connect(); });
     // $( "#disconnect" ).click(function() { disconnect(); });
     $( "#getUser" ).click(function() { getUser();});

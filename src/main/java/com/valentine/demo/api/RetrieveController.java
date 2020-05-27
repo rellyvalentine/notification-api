@@ -77,7 +77,7 @@ public class RetrieveController {
 //we will create our notification here and update the user it goes to through the websocket subscription
     @PostMapping("/api-v1/save-notif")
     @MessageMapping("/new-notif")
-    @RequestMapping("/queue/bell")
+    @RequestMapping("/queue/bell-new")
     public void addNotification(long userId, Principal principal) throws Exception {
         Thread.sleep(1000);
 
@@ -104,16 +104,22 @@ public class RetrieveController {
         notificationService.saveNotification(notification);
 
         //update the notification size of the user that is accessed
-        sendingOperations.convertAndSendToUser(userService.getUserById(userId).getUserName(), "/queue/bell", notificationService.getNewNotifications(userId).size());
+        sendingOperations.convertAndSendToUser(userService.getUserById(userId).getUserName(), "/queue/bell-new", notificationService.getNewNotifications(userId).size());
 
         //return the new notifications for the logged in user
 //        return notificationService.getNewNotifications(userService.getLoggedInUserAccount().getUserId()).size();
     }
 
-    @PostMapping("/api-v1/read-notif")
+//    @PostMapping("/api-v1/read-notif")
+    @MessageMapping("/read-notif")
+    @RequestMapping("/queue/bell-read")
     public void readNotification(@RequestBody long notificationId){
         DemoApplication.logger.debug("Reading notification: "+notificationId);
         notificationService.readNotification(notificationId);
+
+        UserAccount user = userService.getLoggedInUserAccount();
+
+        sendingOperations.convertAndSendToUser(user.getUserName(), "/queue/bell-read", notificationService.getNewNotifications(user.getUserId()).size());
     }
 
 

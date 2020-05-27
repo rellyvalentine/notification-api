@@ -230,6 +230,7 @@ hr {
     transition: 0.1s;
     border-radius: 40px;
     border: none;
+    outline: none;
 }
 
 .get-user-button:hover {

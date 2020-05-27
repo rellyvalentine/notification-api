@@ -185,6 +185,10 @@ main {
     overflow-y: scroll;
 }
 
+img {
+    border-radius: 100%;
+}
+
 .notif-container {
     width: 600px;
     height: 100%;
