@@ -60,6 +60,15 @@ public class HomeController {
         return "/notifications";
     }
 
+    @GetMapping("/messages")
+    public String userMessages(Model model) {
+        UserAccount user = accountService.getLoggedInUserAccount();
+        List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
+        model.addAttribute("user", user);
+        model.addAttribute("newNotifications", newNotifications);
+        return "/chat";
+    }
+
     @GetMapping("/profile")
     public String userProfile(Model model) {
         UserAccount user = accountService.getLoggedInUserAccount();

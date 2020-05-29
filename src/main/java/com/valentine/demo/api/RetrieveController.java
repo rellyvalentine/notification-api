@@ -60,7 +60,7 @@ public class RetrieveController {
         long userId = userService.getLoggedInUserAccount().getUserId();
         return notificationService.getNewNotifications(userId);
     }
-    
+
 //we will create our notification here and update the user it goes to through the websocket subscription
     @PostMapping("/api-v1/save-notif")
     @MessageMapping("/new-notif")
