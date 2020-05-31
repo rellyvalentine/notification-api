@@ -5,11 +5,13 @@ import com.valentine.demo.dto.UserPfpDTO;
 import com.valentine.demo.entities.Notification;
 import com.valentine.demo.entities.Person;
 import com.valentine.demo.entities.UserAccount;
+import com.valentine.demo.entities.messaging.Chat;
 import com.valentine.demo.image.ProfilePicture;
 import com.valentine.demo.image.ProfilePictureService;
 import com.valentine.demo.services.NotificationService;
 import com.valentine.demo.services.PersonService;
 import com.valentine.demo.services.UserAccountService;
+import com.valentine.demo.services.messaging.UserChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -24,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -36,8 +39,8 @@ public class HomeController {
     @Autowired
     UserAccountService accountService;
 
-//    @Autowired
-//    ProfilePictureService pfpService;
+    @Autowired
+    UserChatService chatService;
 
     @GetMapping("/home")
     public String userHome(Model model){
@@ -64,6 +67,12 @@ public class HomeController {
     public String userMessages(Model model) {
         UserAccount user = accountService.getLoggedInUserAccount();
         List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
+        List<Chat> chats = chatService.getChatsByUserId(user.getUserId());
+        List<Long> addUsers = new ArrayList<>(); //users to be added to a new chat
+        List<UserAccount> allUsers = accountService.getAllUsers();
+        model.addAttribute("allUsers", allUsers);
+        model.addAttribute("addUsers", addUsers);
+        model.addAttribute("chats", chats);
         model.addAttribute("user", user);
         model.addAttribute("newNotifications", newNotifications);
         return "/chat";

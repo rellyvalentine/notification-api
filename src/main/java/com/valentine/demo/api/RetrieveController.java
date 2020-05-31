@@ -37,7 +37,7 @@ public class RetrieveController {
     private NotificationService notificationService;
 
     @Autowired
-    SimpMessageSendingOperations sendingOperations;
+    SimpMessageSendingOperations sendingOperations; //used to send notifications to OTHER users
 
     @GetMapping("/api-v1-retrieve")
     @MessageMapping("/get-person")
@@ -76,15 +76,15 @@ public class RetrieveController {
         sendingOperations.convertAndSendToUser(userService.getUserById(userId).getUserName(), "/queue/bell-new", notificationService.getNewNotifications(userId).size());
     }
 
+
     @MessageMapping("/read-notif")
-    @RequestMapping("/queue/bell-read")
-    public void readNotification(@RequestBody long notificationId){
+    @SendToUser("/queue/bell-read")
+    public int readNotification(@RequestBody long notificationId){
         DemoApplication.logger.debug("Reading notification: "+notificationId);
         notificationService.readNotification(notificationId);
 
         UserAccount user = userService.getLoggedInUserAccount();
-
-        sendingOperations.convertAndSendToUser(user.getUserName(), "/queue/bell-read", notificationService.getNewNotifications(user.getUserId()).size());
+        return notificationService.getNewNotifications(user.getUserId()).size();
     }
 
 

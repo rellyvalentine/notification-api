@@ -12,6 +12,9 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
 </head>
 
 <body>
@@ -87,13 +90,15 @@
     <section class="messages-list">
         <header>
             <h3>Messages</h3>
-            <a class="theme-color" href="#" data-toggle="modal" data-target="#exampleModal">
-                <svg viewBox="0 0 24 24" class="new-message-icon">
-                    <g>
-                        <path d="M23.25 3.25h-2.425V.825c0-.414-.336-.75-.75-.75s-.75.336-.75.75V3.25H16.9c-.414 0-.75.336-.75.75s.336.75.75.75h2.425v2.425c0 .414.336.75.75.75s.75-.336.75-.75V4.75h2.425c.414 0 .75-.336.75-.75s-.336-.75-.75-.75zm-3.175 6.876c-.414 0-.75.336-.75.75v8.078c0 .414-.337.75-.75.75H4.095c-.412 0-.75-.336-.75-.75V8.298l6.778 4.518c.368.246.79.37 1.213.37.422 0 .844-.124 1.212-.37l4.53-3.013c.336-.223.428-.676.204-1.012-.223-.332-.675-.425-1.012-.2l-4.53 3.014c-.246.162-.563.163-.808 0l-7.586-5.06V5.5c0-.414.337-.75.75-.75h9.094c.414 0 .75-.336.75-.75s-.336-.75-.75-.75H4.096c-1.24 0-2.25 1.01-2.25 2.25v13.455c0 1.24 1.01 2.25 2.25 2.25h14.48c1.24 0 2.25-1.01 2.25-2.25v-8.078c0-.415-.337-.75-.75-.75z"></path>
-                    </g>
-                </svg>
-            </a>
+<!--            <form autocomplete="off" th:action="@{/messages/new}" th:object="${addUsers}">-->
+                <a class="theme-color" href="#" data-toggle="modal" data-target="#exampleModal">
+                    <svg viewBox="0 0 24 24" class="new-message-icon">
+                        <g>
+                            <path d="M23.25 3.25h-2.425V.825c0-.414-.336-.75-.75-.75s-.75.336-.75.75V3.25H16.9c-.414 0-.75.336-.75.75s.336.75.75.75h2.425v2.425c0 .414.336.75.75.75s.75-.336.75-.75V4.75h2.425c.414 0 .75-.336.75-.75s-.336-.75-.75-.75zm-3.175 6.876c-.414 0-.75.336-.75.75v8.078c0 .414-.337.75-.75.75H4.095c-.412 0-.75-.336-.75-.75V8.298l6.778 4.518c.368.246.79.37 1.213.37.422 0 .844-.124 1.212-.37l4.53-3.013c.336-.223.428-.676.204-1.012-.223-.332-.675-.425-1.012-.2l-4.53 3.014c-.246.162-.563.163-.808 0l-7.586-5.06V5.5c0-.414.337-.75.75-.75h9.094c.414 0 .75-.336.75-.75s-.336-.75-.75-.75H4.096c-1.24 0-2.25 1.01-2.25 2.25v13.455c0 1.24 1.01 2.25 2.25 2.25h14.48c1.24 0 2.25-1.01 2.25-2.25v-8.078c0-.415-.337-.75-.75-.75z"></path>
+                        </g>
+                    </svg>
+                </a>
+<!--            </form>-->
         </header>
         <div class="search-bar-container">
             <div class="search-bar" id="conversation-search-bar">
@@ -102,11 +107,11 @@
                         <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
                     </g>
                 </svg>
-                <input id="search-input" type="text" placeholder="Search for people and groups">
+                <input id="search-convo" type="text" placeholder="Search for people and groups">
             </div>
         </div>
         <div class="conversations">
-            <div class="conversation-selection">
+            <div class="conversation-selection" th:each="chat : ${chats}">
                 <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">
                 <div class="user-title">
                     <h5 class="user-title">Bartholemeu Chamberlin</h5>
@@ -118,41 +123,41 @@
                 </div>
             </div>
 
-            <div class="conversation-selection">
-                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">
-                <div class="user-title">
-                    <h5 class="user-title">Baby Pluto</h5>
-                    <p>@liluziburner</p>
-                </div>
-                <div class="message-date">May 22</div>
-                <div class="recent-message">
-                    <p>yeahh lemme get it!</p>
-                </div>
-            </div>
+<!--            <div class="conversation-selection">-->
+<!--                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
+<!--                <div class="user-title">-->
+<!--                    <h5 class="user-title">Baby Pluto</h5>-->
+<!--                    <p>@liluziburner</p>-->
+<!--                </div>-->
+<!--                <div class="message-date">May 22</div>-->
+<!--                <div class="recent-message">-->
+<!--                    <p>yeahh lemme get it!</p>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="conversation-selection">
-                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">
-                <div class="user-title">
-                    <h5 class="user-title">Richard Black</h5>
-                    <p>@blacky</p>
-                </div>
-                <div class="message-date">May 23</div>
-                <div class="recent-message">
-                    <p>ETA???</p>
-                </div>
-            </div>
+<!--            <div class="conversation-selection">-->
+<!--                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
+<!--                <div class="user-title">-->
+<!--                    <h5 class="user-title">Richard Black</h5>-->
+<!--                    <p>@blacky</p>-->
+<!--                </div>-->
+<!--                <div class="message-date">May 23</div>-->
+<!--                <div class="recent-message">-->
+<!--                    <p>ETA???</p>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="conversation-selection">
-                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">
-                <div class="user-title">
-                    <h5 class="user-title">kordell</h5>
-                    <p>@AnimePFP</p>
-                </div>
-                <div class="message-date">May 20</div>
-                <div class="recent-message">
-                    <p>ayo fire force season 2 finally droppin!!</p>
-                </div>
-            </div>
+<!--            <div class="conversation-selection">-->
+<!--                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
+<!--                <div class="user-title">-->
+<!--                    <h5 class="user-title">kordell</h5>-->
+<!--                    <p>@AnimePFP</p>-->
+<!--                </div>-->
+<!--                <div class="message-date">May 20</div>-->
+<!--                <div class="recent-message">-->
+<!--                    <p>ayo fire force season 2 finally droppin!!</p>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </section>
     <section class="chat-container">
@@ -258,13 +263,24 @@
                             <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
                         </g>
                     </svg>
-                    <input type="text" placeholder="Search people">
+                    <input type="text" id="search-person" placeholder="Search people">
                 </div>
-                <div class="conversations">
+                <div id="selected-container" class="selected-people-container">
+                    <button type="button" class="selected-person">
+                        <img th:src="@{default-images/default-profile.png}">
+                        <p>Bartholemeu Chamberlain</p>
+                        <svg viewBox="0 0 24 24">
+                            <g>
+                                <path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+                <div class="conversations" th:each="user : ${allUsers}">
                     <div id="new-message-selection" class="conversation-selection">
-                        <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">
-                        <h5 class="user-title">Bartholemeu Chamberlin</h5>
-                        <p>@sirflexallot</p>
+                        <img th:src="${user.pfp}" src="default-images/default-profile.png" alt="User">
+                        <h5 class="user-title" th:text="${user.name}"></h5>
+                        <p th:text="'@'+${user.userName}"></p>
                     </div>
                 </div>
             </div>
@@ -273,4 +289,5 @@
 </div>
 
 </body>
+<script th:src="@{javascript/messaging.js}"></script>
 </html>

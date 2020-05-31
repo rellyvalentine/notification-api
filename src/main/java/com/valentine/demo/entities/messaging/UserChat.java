@@ -1,6 +1,5 @@
 package com.valentine.demo.entities.messaging;
 
-
 public class UserChat {
 
     private long userId;

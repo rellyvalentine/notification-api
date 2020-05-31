@@ -15,9 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserAccountService implements UserDetailsService {
@@ -75,5 +74,22 @@ public class UserAccountService implements UserDetailsService {
                 .setParameter(3, user.getUserId())
                 .executeUpdate();
     }
+
+    /*
+    returns a list of users that contain the search value within their username or their name
+    similar to Twitter's searching algorithm
+     */
+    public List<UserAccount> searchForUser(String s){
+        List<UserAccount> allUsers = userAccountRepo.findAll();
+//        allUsers.sort(Comparator.comparing(UserAccount::getUserName)); //alphabetically sort the users by username
+         return allUsers.stream()
+                .filter(user -> containsValue(user.getUserName(), user.getName(), s))
+                .collect(Collectors.toList());
+    }
+
+    private boolean containsValue(String username, String name, String value){
+        return username.contains(value) || name.contains(value);
+    }
+
 }
 

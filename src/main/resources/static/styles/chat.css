@@ -368,6 +368,57 @@ header > a:hover {
     border: 1px solid rgb(37, 51, 65);
 }
 
+.selected-people-container {
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    background: rgb(37, 51, 65);
+    border: 1px solid rgb(37, 51, 65);
+    padding: 5px;
+}
+
+.selected-person {
+    display: flex;
+    flex-direction: row;
+    /*    grid: 1fr / 24px 1fr 18.75px;*/
+    /*    grid-template-columns: 24px 1fr 18.75px;*/
+    width: fit-content;
+    height: 30px;
+    padding-left: 3px;
+    padding-right: 10px;
+    background: #15202B;
+    border-radius: 40px;
+    border: 1px solid rgb(121, 75, 196);
+}
+
+.selected-person > img {
+    min-width: 24px;
+    min-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    border-radius: 100%;
+    margin: 0;
+}
+
+.selected-person > p {
+    font-size: 15px;
+    height: 20px;
+    color: rgb(121, 75, 196);
+    padding-left: 5px;
+}
+
+.selected-person > svg {
+    width: 18.75px;
+    height: 18.75px;
+    margin-top: 2.5px;
+    margin-left: 10px;
+    fill: rgb(121, 96, 175);
+}
+
+.selected-person:hover {
+    background: rgb(37, 51, 65);
+}
+
 .modal-body {
     padding: 0;
     overflow-y: scroll;
