@@ -369,7 +369,8 @@ header > a:hover {
 }
 
 .selected-people-container {
-    display: flex;
+    display: none; /*initially none*/
+    flex-wrap: wrap;
     width: 100%;
     min-height: 50px;
     background: rgb(37, 51, 65);
@@ -380,8 +381,8 @@ header > a:hover {
 .selected-person {
     display: flex;
     flex-direction: row;
-    /*    grid: 1fr / 24px 1fr 18.75px;*/
-    /*    grid-template-columns: 24px 1fr 18.75px;*/
+    margin-right: 5px;
+    margin-bottom: 5px;
     width: fit-content;
     height: 30px;
     padding-left: 3px;
@@ -389,6 +390,7 @@ header > a:hover {
     background: #15202B;
     border-radius: 40px;
     border: 1px solid rgb(121, 75, 196);
+    outline: none;
 }
 
 .selected-person > img {
@@ -424,21 +426,43 @@ header > a:hover {
     overflow-y: scroll;
 }
 
-#new-message-selection {
-    grid: 'profile-pic name' 1fr
-    'profile-pic username' 1fr
-            / 49px 1fr max-content;
+.found-user {
+    display: grid;
+    grid: 1fr 1fr / 49px 1fr max-content;
     grid-column-gap: 10px;
+    place-content: center center;
+    align-items: center;
+    padding: 15px;
+    max-height: 80px;
+    border-bottom: 1px solid rgb(56, 68, 77);
+    overflow-y: auto;
 }
 
-#new-message-selection h5 {
-    grid-area: name;
+.found-user img {
+    grid-column: 1 / 2;
+    grid-row: 1 / span 2;
 }
 
-#new-message-selection p {
-    grid-area: username;
+.found-user h5 {
+    font-size: 15px;
+    grid-column: 2 / 3;
+    align-self: end;
+}
+
+.found-user p {
+    /*    grid-area: username;*/
+    grid-column: 2 / 3;
+    grid-row: 2 / auto;
+    align-self: start;
     color: #8899A6;
 }
+
+.found-user:hover {
+    background: rgb(25, 39, 52);
+    cursor: default;
+}
+
+
 
 /*#####################*/
 /*CONVERSATION LIST*/

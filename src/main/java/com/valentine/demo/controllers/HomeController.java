@@ -69,8 +69,8 @@ public class HomeController {
         List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
         List<Chat> chats = chatService.getChatsByUserId(user.getUserId());
         List<Long> addUsers = new ArrayList<>(); //users to be added to a new chat
-        List<UserAccount> allUsers = accountService.getAllUsers();
-        model.addAttribute("allUsers", allUsers);
+//        List<UserAccount> allUsers = accountService.getAllUsers();
+//        model.addAttribute("allUsers", allUsers);
         model.addAttribute("addUsers", addUsers);
         model.addAttribute("chats", chats);
         model.addAttribute("user", user);
