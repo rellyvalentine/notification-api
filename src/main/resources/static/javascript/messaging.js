@@ -5,6 +5,7 @@ let searchPerson = document.getElementById("search-person");
 let foundUsers = document.getElementById("found-users-list");
 let selectedUsers = document.getElementById("selected-container");
 let selectedUsersList = [];
+let usersForm = document.forms.userForm;
 
 connect();
 
@@ -129,3 +130,21 @@ function removeUser(userElement) {
     }
 
 }
+
+function createChat() {
+    usersForm.elements.users.value = selectedUsersList;
+    console.log(usersForm.elements.users.value);
+    usersForm.submit();
+}
+
+
+
+$(function () {
+    //prevents the page from refreshing on button click
+    // $("form").on('submit', function (e) {
+    //     e.preventDefault();
+    // });
+    // // $( "#connect" ).click(function() { connect(); });
+    // // $( "#disconnect" ).click(function() { disconnect(); });
+    $( "#new-chat-button" ).click(function() { createChat();});
+});

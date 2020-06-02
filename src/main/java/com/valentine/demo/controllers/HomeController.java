@@ -1,6 +1,7 @@
 package com.valentine.demo.controllers;
 
 import com.valentine.demo.DemoApplication;
+import com.valentine.demo.dto.UserChatDTO;
 import com.valentine.demo.dto.UserPfpDTO;
 import com.valentine.demo.entities.Notification;
 import com.valentine.demo.entities.Person;
@@ -11,9 +12,11 @@ import com.valentine.demo.image.ProfilePictureService;
 import com.valentine.demo.services.NotificationService;
 import com.valentine.demo.services.PersonService;
 import com.valentine.demo.services.UserAccountService;
+import com.valentine.demo.services.messaging.MessagingService;
 import com.valentine.demo.services.messaging.UserChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +45,9 @@ public class HomeController {
     @Autowired
     UserChatService chatService;
 
+    @Autowired
+    MessagingService msgService;
+
     @GetMapping("/home")
     public String userHome(Model model){
         UserAccount user = accountService.getLoggedInUserAccount();
@@ -68,14 +74,35 @@ public class HomeController {
         UserAccount user = accountService.getLoggedInUserAccount();
         List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
         List<Chat> chats = chatService.getChatsByUserId(user.getUserId());
-        List<Long> addUsers = new ArrayList<>(); //users to be added to a new chat
-//        List<UserAccount> allUsers = accountService.getAllUsers();
-//        model.addAttribute("allUsers", allUsers);
+        UserChatDTO addUsers = new UserChatDTO();
+
         model.addAttribute("addUsers", addUsers);
         model.addAttribute("chats", chats);
         model.addAttribute("user", user);
         model.addAttribute("newNotifications", newNotifications);
         return "/chat";
+    }
+
+
+    @PostMapping("/messages/new")
+    public String createChat(UserChatDTO addedUsers){
+
+        List<Long> users = addedUsers.getUsers();
+
+        DemoApplication.logger.debug("Selected Users: "+users);
+
+        Chat chat = new Chat();
+        UserAccount user = accountService.getLoggedInUserAccount();
+
+        users.add(user.getUserId()); //add the current user to the chat
+
+        msgService.createNewChat(chat); //save the chat to the database
+        
+        DemoApplication.logger.debug("Chat id: "+chat.getChatId());
+        DemoApplication.logger.debug("Users being added: "+users);
+        chatService.addUsers(chat.getChatId(), users); //add the users to the chat
+        return "redirect:/messages";
+
     }
 
     @GetMapping("/profile")

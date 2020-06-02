@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/messages")
@@ -30,19 +28,6 @@ public class MessageController {
 
     @Autowired
     UserChatService userChatService;
-
-    @PostMapping("/new")
-    public void createChat(List<Long> users){
-
-        Chat chat = new Chat();
-        UserAccount user = accountService.getLoggedInUserAccount();
-
-        users.add(user.getUserId()); //add the current user to the chat
-
-        msgService.createNewChat(chat); //save the chat to the database
-        userChatService.addUsers(chat.getChatId(), users); //add the users to the chat
-
-    }
 
     //this endpoint will be used with the WebSocket
     @GetMapping("/api-v1/user-chats")

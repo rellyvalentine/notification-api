@@ -254,7 +254,11 @@
                     </svg>
                 </button>
                 <h2>New message</h2>
-                <button id="new-chat-button" type="submit">Next</button>
+                <form name="userForm" autocomplete="off" th:action="@{/messages/new}" th:object="${addUsers}" method="POST">
+                    <input name="users" type="hidden" th:field="${addUsers.users}">
+                    <input type="hidden" name="csrf" th:value="_csrf">
+                    <button id="new-chat-button" type="submit">Next</button>
+                </form>
             </div>
             <div class="modal-body">
                 <div class="search-bar" id="new-message-search">
