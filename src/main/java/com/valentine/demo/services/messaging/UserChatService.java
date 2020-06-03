@@ -2,8 +2,8 @@ package com.valentine.demo.services.messaging;
 
 import com.valentine.demo.DemoApplication;
 import com.valentine.demo.dao.messaging.ChatRepository;
-import com.valentine.demo.entities.UserAccount;
 import com.valentine.demo.entities.messaging.Chat;
+import com.valentine.demo.entities.messaging.DuoChat;
 import com.valentine.demo.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserChatService {
@@ -57,7 +58,23 @@ public class UserChatService {
 
     //Get all the chats of the logged in user
     public List<Chat> getChatsByUserId(long userId){
+        List<Chat> chats = chatRepo.getChatsByUserId(userId);
+        List<Chat> duoChats = chats.stream()
+                .filter(chat -> getUsersInChat(chat.getChatId()).size() == 2)
+                .collect(Collectors.toList());
+        for(Chat chat : duoChats){
+            //get the other user from the chat
+            long otherUser = getUsersInChat(chat.getChatId()).stream()
+                    .filter(user -> user != accountService.getLoggedInUserAccount().getUserId())
+                    .collect(Collectors.toList()).get(0);
+
+            chat.setOtherUser(accountService.getUserById(otherUser));
+        }
         return chatRepo.getChatsByUserId(userId);
+    }
+
+    public List<DuoChat> getDuoChats(long userId){
+        
     }
 
     protected List<Long> getUsersInChat(long chatId){

@@ -112,52 +112,16 @@
         </div>
         <div class="conversations">
             <div class="conversation-selection" th:each="chat : ${chats}">
-                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">
+                <img th:src="${chat.otherUser.pfp}" src="default-images/default-profile.png" th:alt="${chat.otherUser.name}">
                 <div class="user-title">
-                    <h5 class="user-title">Bartholemeu Chamberlin</h5>
-                    <p>@sirflexallot</p>
+                    <h5 class="user-title" th:text="${chat.otherUser.name}"></h5>
+                    <p th:text="'@'+${chat.otherUser.userName}"></p>
                 </div>
                 <div class="message-date">May 12</div>
                 <div class="recent-message">
                     <p>this is a message welcoming you to the beta</p>
                 </div>
             </div>
-
-<!--            <div class="conversation-selection">-->
-<!--                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
-<!--                <div class="user-title">-->
-<!--                    <h5 class="user-title">Baby Pluto</h5>-->
-<!--                    <p>@liluziburner</p>-->
-<!--                </div>-->
-<!--                <div class="message-date">May 22</div>-->
-<!--                <div class="recent-message">-->
-<!--                    <p>yeahh lemme get it!</p>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="conversation-selection">-->
-<!--                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
-<!--                <div class="user-title">-->
-<!--                    <h5 class="user-title">Richard Black</h5>-->
-<!--                    <p>@blacky</p>-->
-<!--                </div>-->
-<!--                <div class="message-date">May 23</div>-->
-<!--                <div class="recent-message">-->
-<!--                    <p>ETA???</p>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="conversation-selection">-->
-<!--                <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
-<!--                <div class="user-title">-->
-<!--                    <h5 class="user-title">kordell</h5>-->
-<!--                    <p>@AnimePFP</p>-->
-<!--                </div>-->
-<!--                <div class="message-date">May 20</div>-->
-<!--                <div class="recent-message">-->
-<!--                    <p>ayo fire force season 2 finally droppin!!</p>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
     </section>
     <section class="chat-container">

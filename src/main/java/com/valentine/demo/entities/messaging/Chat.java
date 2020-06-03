@@ -1,8 +1,9 @@
 package com.valentine.demo.entities.messaging;
 
+import com.valentine.demo.entities.UserAccount;
+
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 
 @Entity
@@ -24,6 +25,10 @@ public class Chat {
             fetch = FetchType.LAZY)
     @JoinTable(name = "user_chat", joinColumns=@JoinColumn(name="chat_id"), inverseJoinColumns=@JoinColumn(name="user_id"))
     private List<Message> users;
+
+//    //@Transient lets us add fields that aren't stored in the database
+//    @Transient
+//    private UserAccount otherUser; //this user field will be used for Duo Conversations
 
     public Chat() {
 
@@ -52,4 +57,12 @@ public class Chat {
     public void setPassword(String password) {
         this.password = password;
     }
+
+//    public UserAccount getOtherUser() {
+//        return otherUser;
+//    }
+//
+//    public void setOtherUser(UserAccount otherUser) {
+//        this.otherUser = otherUser;
+//    }
 }
