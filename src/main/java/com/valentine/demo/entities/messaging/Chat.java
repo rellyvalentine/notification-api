@@ -7,6 +7,7 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "chat")
 public class Chat {
 
     @Id
@@ -26,9 +27,12 @@ public class Chat {
     @JoinTable(name = "user_chat", joinColumns=@JoinColumn(name="chat_id"), inverseJoinColumns=@JoinColumn(name="user_id"))
     private List<Message> users;
 
-//    //@Transient lets us add fields that aren't stored in the database
-//    @Transient
-//    private UserAccount otherUser; //this user field will be used for Duo Conversations
+    //@Transient lets us add fields that aren't stored in the database
+    @Transient
+    private UserAccount otherUser; //this user field will be used for Duo Conversations
+
+    @Transient
+    private boolean isGroupChat; //checks if the chat is a Group Chat
 
     public Chat() {
 
@@ -58,11 +62,19 @@ public class Chat {
         this.password = password;
     }
 
-//    public UserAccount getOtherUser() {
-//        return otherUser;
-//    }
-//
-//    public void setOtherUser(UserAccount otherUser) {
-//        this.otherUser = otherUser;
-//    }
+    public UserAccount getOtherUser() {
+        return otherUser;
+    }
+
+    public void setOtherUser(UserAccount otherUser) {
+        this.otherUser = otherUser;
+    }
+
+    public boolean isGroupChat() {
+        return isGroupChat;
+    }
+
+    public void setGroupChat(boolean groupChat) {
+        isGroupChat = groupChat;
+    }
 }
