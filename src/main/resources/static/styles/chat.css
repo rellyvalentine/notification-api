@@ -407,6 +407,7 @@ header > a:hover {
     height: 20px;
     color: rgb(121, 75, 196);
     padding-left: 5px;
+    margin-top: 2.5px;
 }
 
 .selected-person > svg {
@@ -415,6 +416,7 @@ header > a:hover {
     margin-top: 2.5px;
     margin-left: 10px;
     fill: rgb(121, 96, 175);
+    align-self: center;
 }
 
 .selected-person:hover {

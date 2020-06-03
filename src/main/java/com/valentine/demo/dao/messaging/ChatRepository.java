@@ -17,4 +17,9 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
             "WHERE uc.user_id = ?1")
     public List<Chat> getChatsByUserId(long userId);
 
+    @Query(nativeQuery = true, value = "SELECT user_id " +
+            "FROM user_chat " +
+            "WHERE chat_id = ?1")
+    public List<Long> getUsersInChat(long chatId);
+
 }

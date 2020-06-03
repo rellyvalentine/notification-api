@@ -42,11 +42,11 @@ public class MessageController {
     @SendToUser("/topic/found-users")
     public List<UserAccount> searchUsers(String s){
 
-        DemoApplication.logger.debug("Search for user: "+s);
-        List<UserAccount> usersFound = accountService.searchForUser(s);
-        for(UserAccount user : usersFound){
-            DemoApplication.logger.debug("User found: "+user.getUserName());
-        }
+//        DemoApplication.logger.debug("Search for user: "+s);
+//        List<UserAccount> usersFound = accountService.searchForUser(s);
+//        for(UserAccount user : usersFound){
+//            DemoApplication.logger.debug("User found: "+user.getUserName());
+//        }
         return accountService.searchForUser(s);
     }
 

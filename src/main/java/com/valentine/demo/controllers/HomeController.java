@@ -97,7 +97,7 @@ public class HomeController {
         users.add(user.getUserId()); //add the current user to the chat
 
         msgService.createNewChat(chat); //save the chat to the database
-        
+
         DemoApplication.logger.debug("Chat id: "+chat.getChatId());
         DemoApplication.logger.debug("Users being added: "+users);
         chatService.addUsers(chat.getChatId(), users); //add the users to the chat
