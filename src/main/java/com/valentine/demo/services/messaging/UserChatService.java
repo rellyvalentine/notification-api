@@ -20,17 +20,14 @@ public class UserChatService {
     ChatRepository chatRepo;
 
     @Autowired
-    MessagingService msgService;
-
-    @Autowired
     UserAccountService accountService;
 
     @PersistenceContext
     EntityManager entityManager;
 
-    //List of all chats from the user
-    //Transform the list into a map that contains a list of users
-    //find the chat that contains the list with those users
+    public Chat getChatById(long chatId){
+        return chatRepo.findChatById(chatId);
+    }
 
     //insert our users into the chat
     @Transactional
@@ -45,7 +42,7 @@ public class UserChatService {
             if(users.size() == 2){
                 chat.setGroupChat(false);
             }
-            msgService.createNewChat(chat); //save the chat to the database
+            chatRepo.save(chat); //save the chat to the database
 
             //add each user to the chat
             for (Long user : users) {
@@ -80,6 +77,9 @@ public class UserChatService {
         return chatRepo.getUsersInChat(chatId);
     }
 
+    //List of all chats from the user
+    //Transform the list into a map that contains a list of users
+    //find the chat that contains the list with those users
     public boolean checkIfExists(List<Long> addedUsers){
         List<Chat> chats = getChatsByUserId(accountService.getLoggedInUserAccount().getUserId());
         Map<Long, List<Long>> userChatMap = new HashMap<>();

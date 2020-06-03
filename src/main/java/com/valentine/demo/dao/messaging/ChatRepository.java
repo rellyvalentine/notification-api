@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
@@ -22,4 +23,8 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
             "WHERE chat_id = ?1")
     public List<Long> getUsersInChat(long chatId);
 
+    @Query(nativeQuery = true, value = "SELECT  chat_id, topic, password " +
+            "FROM chat " +
+            "WHERE chat_id = ?1")
+    public Chat findChatById(long chatId);
 }

@@ -11,6 +11,9 @@ public class Message {
     @Column(name = "message_id")
     private long messageId;
 
+    @Column(name = "content")
+    private String content;
+
     @Column(name = "user_id")
     private long userId;
 

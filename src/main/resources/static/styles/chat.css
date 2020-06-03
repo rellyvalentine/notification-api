@@ -563,6 +563,10 @@ input::placeholder {
     border-bottom: 1px solid rgb(56, 68, 77);
 }
 
+.open-convo {
+    border-right: solid 1.5px rgb(121, 75, 196);
+}
+
 .conversation-selection:hover {
     background: rgb(25, 39, 52);
     cursor: pointer;
@@ -621,10 +625,60 @@ input::placeholder {
     text-overflow: ellipsis;
 }
 
+/*#####################*/
+/*CHAT AREA*/
+/*#####################*/
+
+.no-selection {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgb(56, 68, 77);
+}
+
+.no-selection h3 {
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.3125;
+    margin-bottom: 10px;
+}
+
+.no-selection p {
+    font-size: 15px;
+    line-height: 1.3125;
+    color: #8899A6;
+
+}
+
+.no-selection a {
+    min-height: 39px;
+    min-width: calc(62.79px);
+    width: 128.6px;
+    margin-top: 20px;
+    padding: 10px;
+    text-align: center;
+
+    background: rgb(121, 75, 196);
+    border: none;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFFFFF;
+    transition: 0.2s;
+}
+
+.no-selection a:hover {
+    text-decoration: none;
+    background: rgb(134, 93, 202);
+    cursor: pointer;
+}
+
 .chat-container {
+    display: none;
     grid-area: chat-messages;
     max-width: 600px;
-    display: grid;
     grid-template-rows: 53px 1fr 52px;
     border-right: 1px solid rgb(56, 68, 77);
 }

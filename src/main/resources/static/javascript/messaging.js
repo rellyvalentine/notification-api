@@ -1,11 +1,16 @@
 var stompClient = null;
 
-let selectedContainer =  document.getElementById("selected-container");
 let searchPerson = document.getElementById("search-person");
 let foundUsers = document.getElementById("found-users-list");
 let selectedUsers = document.getElementById("selected-container");
-let selectedUsersList = [];
 let usersForm = document.forms.userForm;
+
+let chatContainer = document.getElementById("chat-container");
+let noSelectionContainer = document.getElementById("no-selection-container");
+let convos = document.getElementsByClassName("conversation-selection");
+let prevConvo;
+
+let selectedUsersList = [];
 
 connect();
 
@@ -30,9 +35,22 @@ async function connect() {
           let users = JSON.parse(message.body);
           showFoundUsers(users);
        });
+       stompClient.subscribe('/user/topic/chat', function(message) {
+           //un-hide the chat container
+           noSelectionContainer.style.display = "none";
+           chatContainer.style.display = "grid";
+           console.log(message.body);
+       });
+
+        for(let convo of convos) {
+            convo.addEventListener("click", getConversation, false);
+        }
     });
 }
 
+/**
+ * CHAT CREATION
+ */
 //search for users
 searchPerson.oninput = function(e) {
   let s = e.target.value;
@@ -71,14 +89,14 @@ function showFoundUsers(users) {
 
         userElement.append(pfp, name, username);
 
-        userElement.addEventListener("click", addUser, false);
+        userElement.addEventListener("click", selectUser, false);
         userElement.user = user; //we added the user object to the element's proto
         foundUsers.append(userElement); //add the found user to the list
     }
 }
 
 //event listeners pass the current target as its parameter
-function addUser(userElement) {
+function selectUser(userElement) {
 
         let user = userElement.currentTarget.user; //the current target is passed as the param
         console.log(user);
@@ -103,13 +121,13 @@ function addUser(userElement) {
             pfp.src = user.pfp;
             name.innerText = user.name;
             addedUser.append(pfp, name, svg); //create the addedUser button
-            addedUser.addEventListener("click", removeUser);
+            addedUser.addEventListener("click", removeFromSelection);
             selectedUsers.append(addedUser); //add the user to the document
             selectedUsersList.push(user.userId); //add to the list to be submitted
         }
 }
 
-function removeUser(userElement) {
+function removeFromSelection(userElement) {
     let userId = parseInt(userElement.currentTarget.id);
     console.log("Removing user: "+userId);
     console.log("Index in array: "+selectedUsersList.indexOf(userId));
@@ -124,11 +142,10 @@ function removeUser(userElement) {
     }
 
     try{
-        document.getElementById("user"+userId).addEventListener("click", addUser); //re-enable the addUser event
+        document.getElementById("user"+userId).addEventListener("click", selectUser); //re-enable the addUser event
     } catch (e) {
         console.log("This user is no longer in the search results: "+e);
     }
-
 }
 
 function createChat() {
@@ -137,14 +154,33 @@ function createChat() {
     usersForm.submit();
 }
 
+/**
+ * MESSAGING FUNCTIONALITY
+ */
 
+const filterId = function(stringId) {
+    return stringId.split("").filter(n => {
+        return !isNaN(n);
+    }).join("");
+};
+
+function getConversation(convo){
+    let currentConvo = convo.currentTarget.id;
+    document.getElementById(currentConvo).classList.add("open-convo");
+    if(prevConvo != null){
+        document.getElementById(prevConvo).classList.remove("open-convo");
+    }
+    prevConvo = currentConvo;
+
+    let convoId = filterId(currentConvo);
+    console.log("Opening Chat: "+convoId);
+    stompClient.send("/app/open-chat", {}, (convoId));
+}
 
 $(function () {
     //prevents the page from refreshing on button click
     // $("form").on('submit', function (e) {
     //     e.preventDefault();
     // });
-    // // $( "#connect" ).click(function() { connect(); });
-    // // $( "#disconnect" ).click(function() { disconnect(); });
     $( "#new-chat-button" ).click(function() { createChat();});
 });

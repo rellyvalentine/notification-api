@@ -90,7 +90,6 @@
     <section class="messages-list">
         <header>
             <h3>Messages</h3>
-<!--            <form autocomplete="off" th:action="@{/messages/new}" th:object="${addUsers}">-->
                 <a class="theme-color" href="#" data-toggle="modal" data-target="#exampleModal">
                     <svg viewBox="0 0 24 24" class="new-message-icon">
                         <g>
@@ -98,7 +97,6 @@
                         </g>
                     </svg>
                 </a>
-<!--            </form>-->
         </header>
         <div class="search-bar-container">
             <div class="search-bar" id="conversation-search-bar">
@@ -111,7 +109,7 @@
             </div>
         </div>
         <div class="conversations">
-            <div class="conversation-selection" th:each="chat : ${chats}">
+            <div class="conversation-selection" th:each="chat : ${chats}" th:id="'chat'+${chat.chatId}">
                 <img th:src="${chat.otherUser.pfp}" src="default-images/default-profile.png" th:alt="${chat.otherUser.name}">
                 <div class="user-title">
                     <h5 class="user-title" th:text="${chat.otherUser.name}"></h5>
@@ -124,7 +122,12 @@
             </div>
         </div>
     </section>
-    <section class="chat-container">
+    <section class="no-selection" id="no-selection-container">
+        <h3>You don't have a message selected</h3>
+        <p>Choose one from your existing messages, or start a new one.</p>
+        <a class="new-message-button" href="#" data-toggle="modal" data-target="#exampleModal">New Message</a>
+    </section>
+    <section class="chat-container" id="chat-container">
         <header class="chat-info-container">
             <h3>Baby Pluto</h3>
             <p>@liluziburner</p>

@@ -1,9 +1,7 @@
 package com.valentine.demo.services.messaging;
 
 import com.valentine.demo.DemoApplication;
-import com.valentine.demo.dao.messaging.ChatRepository;
 import com.valentine.demo.dao.messaging.MessageStore;
-import com.valentine.demo.entities.UserAccount;
 import com.valentine.demo.entities.messaging.Chat;
 import com.valentine.demo.entities.messaging.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +17,12 @@ import java.util.List;
 public class MessagingService {
 
     @Autowired
-    ChatRepository chatRepo;
-
-    @Autowired
     MessageStore messageStore;
 
-    public void createNewChat(Chat chat) {
-        chatRepo.save(chat);
-    }
+    @Autowired
+    UserChatService chatService;
 
-    public void sendMessage(Message message){
+    public void saveMessage(Message message){
 
         ZonedDateTime current = ZonedDateTime.now(ZoneId.of("America/New_York")); //gives us the current date from time zone
 
@@ -43,6 +37,15 @@ public class MessagingService {
         message.setNew(true);
 
         messageStore.save(message);
+    }
+
+    public void sendMessage(Message message){
+        Chat currentChat = chatService.getChatById(message.getChatId());
+
+    }
+
+    public List<Message> getChatMessages(long chatId){
+        return messageStore.getMessagesByChatId(chatId);
     }
 
 }
