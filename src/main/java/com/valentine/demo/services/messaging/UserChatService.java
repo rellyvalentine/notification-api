@@ -20,6 +20,9 @@ public class UserChatService {
     ChatRepository chatRepo;
 
     @Autowired
+    MessagingService msgService;
+
+    @Autowired
     UserAccountService accountService;
 
     @PersistenceContext
@@ -31,23 +34,25 @@ public class UserChatService {
 
     //insert our users into the chat
     @Transactional
-    public void addUsers(Long chat, List<Long> users){
+    public void addUsers(List<Long> users){
         users.sort(Comparator.naturalOrder());
         //check if the chat already exists
         if(checkIfExists(users)){
             DemoApplication.logger.debug("These users are already in a chat together");
         } else {
 
+            Chat chat = new Chat();
+            msgService.createNewChat(chat); //save the chat to the database
+
             //add each user to the chat
             for (Long user : users) {
                 DemoApplication.logger.debug("Adding user: " + accountService.getUserById(user).getUserName());
                 entityManager.createNativeQuery("INSERT INTO user_chat VALUES (?, ?)")
-                        .setParameter(1, chat)
+                        .setParameter(1, chat.getChatId())
                         .setParameter(2, user)
                         .executeUpdate();
             }
         }
-
     }
 
     //Get all the chats of the logged in user

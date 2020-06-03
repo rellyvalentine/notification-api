@@ -88,19 +88,11 @@ public class HomeController {
     public String createChat(UserChatDTO addedUsers){
 
         List<Long> users = addedUsers.getUsers();
-
-        DemoApplication.logger.debug("Selected Users: "+users);
-
-        Chat chat = new Chat();
         UserAccount user = accountService.getLoggedInUserAccount();
-
         users.add(user.getUserId()); //add the current user to the chat
 
-        msgService.createNewChat(chat); //save the chat to the database
-
-        DemoApplication.logger.debug("Chat id: "+chat.getChatId());
         DemoApplication.logger.debug("Users being added: "+users);
-        chatService.addUsers(chat.getChatId(), users); //add the users to the chat
+        chatService.addUsers(users); //add the users to the chat
         return "redirect:/messages";
 
     }
