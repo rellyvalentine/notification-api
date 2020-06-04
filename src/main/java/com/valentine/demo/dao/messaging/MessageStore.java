@@ -12,7 +12,8 @@ public interface MessageStore extends JpaRepository<Message, Long> {
 
     @Query(nativeQuery = true, value = "SELECT message_id, user_id, chat_id, date, is_new " +
             "FROM message " +
-            "WHERE chat_id = ?1")
+            "WHERE chat_id = ?1 " +
+            "ORDER BY date DESC")
     public List<Message> getMessagesByChatId(long chatId);
 
 }

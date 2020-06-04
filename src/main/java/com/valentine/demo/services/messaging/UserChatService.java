@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
@@ -26,7 +27,8 @@ public class UserChatService {
     EntityManager entityManager;
 
     public Chat getChatById(long chatId){
-        return chatRepo.findChatById(chatId);
+        Chat chat = chatRepo.findChatById(chatId);
+        return setOtherUser(chat);
     }
 
     //insert our users into the chat
@@ -65,12 +67,9 @@ public class UserChatService {
 
         for(Chat chat : duoChats){
             //get the other user from the chat
-            long otherUser = getUsersInChat(chat.getChatId()).stream()
-                    .filter(user -> user != accountService.getLoggedInUserAccount().getUserId())
-                    .collect(Collectors.toList()).get(0);
-            chat.setOtherUser(accountService.getUserById(otherUser));
+            setOtherUser(chat);
         }
-        return chatRepo.getChatsByUserId(userId);
+        return chats;
     }
 
     protected List<Long> getUsersInChat(long chatId){
@@ -80,7 +79,7 @@ public class UserChatService {
     //List of all chats from the user
     //Transform the list into a map that contains a list of users
     //find the chat that contains the list with those users
-    public boolean checkIfExists(List<Long> addedUsers){
+    private boolean checkIfExists(List<Long> addedUsers){
         List<Chat> chats = getChatsByUserId(accountService.getLoggedInUserAccount().getUserId());
         Map<Long, List<Long>> userChatMap = new HashMap<>();
         for(Chat chat : chats){
@@ -89,6 +88,14 @@ public class UserChatService {
             userChatMap.put(chat.getChatId(), usersInChat);
         }
         return userChatMap.containsValue(addedUsers);
+    }
+
+    private Chat setOtherUser(Chat chat){
+        long otherUser = getUsersInChat(chat.getChatId()).stream()
+                .filter(user -> user != accountService.getLoggedInUserAccount().getUserId())
+                .collect(Collectors.toList()).get(0);
+        chat.setOtherUser(accountService.getUserById(otherUser));
+        return chat;
     }
 
 }

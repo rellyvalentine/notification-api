@@ -35,12 +35,14 @@ public class MessageController {
     @Autowired
     SimpMessageSendingOperations sendingOperations;
 
+    Chat openChat;
+
     //this endpoint will be used with the WebSocket
-    @GetMapping("/api-v1/user-chats")
-    public List<Chat> userChats(){
-        //get the chats of the currently logged in user
-        return userChatService.getChatsByUserId(accountService.getLoggedInUserAccount().getUserId());
-    }
+//    @GetMapping("/api-v1/user-chats")
+//    public List<Chat> userChats(){
+//        //get the chats of the currently logged in user
+//        return userChatService.getChatsByUserId(accountService.getLoggedInUserAccount().getUserId());
+//    }
 
     //this service will be used with the WebSocket
     @MessageMapping("/search-users")
@@ -51,18 +53,30 @@ public class MessageController {
 
     @MessageMapping("/open-chat")
     @SendToUser("/topic/chat")
-    public List<Message> openChat(long id){
-        return msgService.getChatMessages(id);
+    public Chat openChat(long id){
+        this.openChat = userChatService.getChatById(id);
+        DemoApplication.logger.debug("User in chat: "+openChat.getOtherUser());
+//        return msgService.getChatMessages(id);
+//        return userChatService.getChatById(id);
+        return openChat;
     }
 
     @MessageMapping("/send")
+    @SendToUser("/queue/sent-message")
     @RequestMapping("/queue/receive-message")
-    public void sendMessage(@Payload Message message){
+    public Message sendMessage(@Payload Message message){
         long senderId = accountService.getLoggedInUserAccount().getUserId();
         message.setUserId(senderId);
+        message.setChatId(this.openChat.getChatId());
         msgService.saveMessage(message);
-        msgService.sendMessage(message);
+        return msgService.sendMessage(message);
     }
+
+
+//    public Message sentMessage(Message message){
+//        DemoApplication.logger.debug("MESSAGE HAS BEEN SENT: "+message.getMessageId());
+//        return message;
+//    }
 
 
 }

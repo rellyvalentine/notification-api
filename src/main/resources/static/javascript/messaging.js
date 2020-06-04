@@ -39,7 +39,7 @@ async function connect() {
            //un-hide the chat container
            noSelectionContainer.style.display = "none";
            chatContainer.style.display = "grid";
-           console.log(message.body);
+           console.log(message.body.chatId);
        });
 
         for(let convo of convos) {
@@ -157,6 +157,8 @@ function createChat() {
 /**
  * MESSAGING FUNCTIONALITY
  */
+
+
 
 const filterId = function(stringId) {
     return stringId.split("").filter(n => {

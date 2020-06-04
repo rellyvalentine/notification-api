@@ -26,6 +26,9 @@ public class Message {
     @Column(name = "is_new")
     private boolean isNew;
 
+    @Transient
+    private boolean received;
+
     public Message() {
 
     }
@@ -50,6 +53,14 @@ public class Message {
         return chatId;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public void setChatId(long chatId) {
         this.chatId = chatId;
     }
@@ -68,5 +79,13 @@ public class Message {
 
     public void setNew(boolean aNew) {
         isNew = aNew;
+    }
+
+    public boolean isReceived() {
+        return received;
+    }
+
+    public void setReceived(boolean received) {
+        this.received = received;
     }
 }
