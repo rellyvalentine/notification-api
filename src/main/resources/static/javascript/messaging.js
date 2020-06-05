@@ -8,6 +8,9 @@ let usersForm = document.forms.userForm;
 let chatContainer = document.getElementById("chat-container");
 let noSelectionContainer = document.getElementById("no-selection-container");
 let convos = document.getElementsByClassName("conversation-selection");
+let currentChat = document.getElementById("open-chat");
+
+let openConvo;
 let prevConvo;
 
 let selectedUsersList = [];
@@ -39,7 +42,23 @@ async function connect() {
            //un-hide the chat container
            noSelectionContainer.style.display = "none";
            chatContainer.style.display = "grid";
-           console.log(message.body.chatId);
+           // console.log(message.body.chatId);
+           console.log(message.body);
+           openConvo = JSON.parse(message.body);
+
+           clearChat();
+
+           loadMessages(openConvo.otherUser);
+       });
+
+       stompClient.subscribe('/user/queue/sent-message', function(message) {
+           console.log(message.body);
+           createSentMessage(JSON.parse(message.body));
+       });
+
+       stompClient.subscribe('/user/queue/receive-message', function(message) {
+           createReceiveMessage(JSON.parse(message.body), openConvo.otherUser);
+          console.log(message.body);
        });
 
         for(let convo of convos) {
@@ -158,7 +177,13 @@ function createChat() {
  * MESSAGING FUNCTIONALITY
  */
 
-
+function clearChat() {
+    if(currentChat.firstChild != null) {
+        while(currentChat.firstChild) {
+            currentChat.removeChild(currentChat.lastChild);
+        }
+    }
+}
 
 const filterId = function(stringId) {
     return stringId.split("").filter(n => {
@@ -166,7 +191,8 @@ const filterId = function(stringId) {
     }).join("");
 };
 
-function getConversation(convo){
+function getConversation(convo) {
+
     let currentConvo = convo.currentTarget.id;
     document.getElementById(currentConvo).classList.add("open-convo");
     if(prevConvo != null){
@@ -179,10 +205,101 @@ function getConversation(convo){
     stompClient.send("/app/open-chat", {}, (convoId));
 }
 
+async function loadMessages(otherUser) {
+
+    document.getElementById("header-name").innerText = otherUser.name;
+    document.getElementById("header-username").innerText ="@"+otherUser.username;
+
+    const response = await fetch("http://localhost:8080/messages/api-v1/chat-messages");
+    let chatMessages = await response.json();
+    console.log(chatMessages);
+    // let openChat = document.getElementById("open-chat");
+
+    for(let message of chatMessages) {
+        if(message.received === true) {
+            //create the received div
+            createReceiveMessage(message, otherUser);
+        } else {
+            //create the sent div
+            createSentMessage(message);
+        }
+    }
+
+}
+
+
+let messageInput = document.getElementById("message-input");
+let sendButton = document.getElementById("send-button");
+sendButton.addEventListener("click", sendMessage, false);
+
+function sendMessage() {
+    let message = {
+        content: messageInput.value,
+    };
+    console.log(JSON.stringify(message));
+    stompClient.send("/app/send", {}, JSON.stringify(message));
+    messageInput.value = null;
+}
+
+
+function createSentMessage(message) {
+    console.log("creating message dynamically: "+message.content);
+
+    let sentMessage = document.createElement("div");
+    let messageContainer = document.createElement("div");
+    let messageContent = document.createElement("p");
+    let messageDate = document.createElement("p");
+
+    sentMessage.className = "user-message";
+    messageContainer.className = "message-container";
+    messageContent.className = "sent-content";
+    messageContent.innerText = message.content;
+
+    messageDate.innerText = message.date;
+    messageContainer.append(messageContent);
+
+    sentMessage.append(messageContainer, messageDate);
+    // currentChat.append(sentMessage);
+    insertAfter(sentMessage);
+}
+
+function createReceiveMessage(message, otherUser) {
+    console.log("receiving message dynamically: "+message.content+"//"+otherUser);
+
+    let receiveMessage = document.createElement("div");
+    let otherUserElement = document.createElement("a");
+    let userPfp = document.createElement("img");
+    let messageContainer = document.createElement("div");
+    let messageContent = document.createElement("p");
+    let messageDate = document.createElement("p");
+
+    receiveMessage.className = "receive-message";
+    otherUserElement.href = "#";
+    userPfp.src = otherUser.pfp;
+    otherUserElement.append(userPfp);
+    messageContainer.className = "message-container";
+    messageContent.className = "received-content";
+    messageContent.innerText = message.content;
+    messageContainer.append(messageContent);
+    messageDate.innerText = message.date;
+
+    receiveMessage.append(otherUserElement, messageContainer, messageDate);
+    // currentChat.append(receiveMessage);
+    insertAfter(receiveMessage);
+}
+
+function insertAfter(newNode) {
+    if(currentChat.firstChild === null) {
+        currentChat.append(newNode);
+    }
+        let referenceNode = currentChat.firstChild;
+        referenceNode.parentNode.insertBefore(newNode, referenceNode);
+}
+
 $(function () {
     //prevents the page from refreshing on button click
-    // $("form").on('submit', function (e) {
-    //     e.preventDefault();
-    // });
+    $("#send-button").on('click', function (e) {
+        e.preventDefault();
+    });
     $( "#new-chat-button" ).click(function() { createChat();});
 });

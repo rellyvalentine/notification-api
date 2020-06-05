@@ -61,6 +61,11 @@ public class MessageController {
         return openChat;
     }
 
+    @GetMapping("/api-v1/chat-messages")
+    public List<Message> loadMessages(){
+        return msgService.getChatMessages(openChat.getChatId());
+    }
+
     @MessageMapping("/send")
     @SendToUser("/queue/sent-message")
     @RequestMapping("/queue/receive-message")

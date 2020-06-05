@@ -128,9 +128,9 @@
         <a class="new-message-button" href="#" data-toggle="modal" data-target="#exampleModal">New Message</a>
     </section>
     <section class="chat-container" id="chat-container">
-        <header class="chat-info-container">
-            <h3>Baby Pluto</h3>
-            <p>@liluziburner</p>
+        <header id="convo-header" class="chat-info-container">
+            <h3 id="header-name"></h3>
+            <p id="header-username"></p>
             <a class="icon-button" href="#">
                 <svg class="icon info-icon" viewBox="0 0 24 24">
                     <g>
@@ -141,22 +141,22 @@
                 </svg>
             </a>
         </header>
-        <div class="open-chat">
-            <div class="user-message">
-                <div class="message-container">
-                    <p>yeahh lemme get it!</p>
-                </div>
-                <p>May 22, 2020, 5:07 PM</p>
-            </div>
-            <div class="receive-message">
-                <a href="#">
-                    <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">
-                </a>
-                <div class="message-container">
-                    <p>yo u still want me to send u dis?</p>
-                </div>
-                <p>May 22, 2020, 5:04 PM</p>
-            </div>
+        <div class="open-chat" id="open-chat">
+<!--            <div class="user-message">-->
+<!--                <div class="message-container">-->
+<!--                    <p class="sent-content"></p>-->
+<!--                </div>-->
+<!--                <p>May 22, 2020, 5:07 PM</p>-->
+<!--            </div>-->
+<!--            <div class="receive-message">-->
+<!--                <a href="#">-->
+<!--                    <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
+<!--                </a>-->
+<!--                <div class="message-container">-->
+<!--                    <p class="received-content"></p>-->
+<!--                </div>-->
+<!--                <p>May 22, 2020, 5:04 PM</p>-->
+<!--            </div>-->
         </div>
         <div class="message-input">
             <div class="img-gif-selection-holder">
@@ -183,7 +183,7 @@
             </div>
 
             <div class="text-holder">
-                <input type="text" placeholder="Start a new message">
+                <input id="message-input" type="text" placeholder="Start a new message">
                 <a href="#" class="icon-button emoji-button">
                     <div class="icon-container">
                         <svg class="emoji-icon" viewBox="0 0 24 24">
@@ -198,7 +198,7 @@
                 </a>
             </div>
 
-            <a href="#" class="theme-color send-button">
+            <a href="#" id="send-button" class="theme-color send-button">
                 <svg class="icon" viewBox="0 0 24 24">
                     <g>
                         <path d="M21.13 11.358L3.614 2.108c-.29-.152-.64-.102-.873.126-.23.226-.293.577-.15.868l4.362 8.92-4.362 8.92c-.143.292-.08.643.15.868.145.14.333.212.523.212.12 0 .24-.028.35-.087l17.517-9.25c.245-.13.4-.386.4-.664s-.155-.532-.4-.662zM4.948 4.51l12.804 6.762H8.255l-3.307-6.76zm3.307 8.26h9.498L4.948 19.535l3.307-6.763z"></path>

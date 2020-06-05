@@ -18,11 +18,11 @@ html {
 }
 
 body {
-
     display: grid;
     grid: 'sidebar main' 1fr / 402px 1fr;
-
 }
+
+
 
 .theme-color {
     color: rgb(121, 75, 196);
@@ -56,9 +56,14 @@ p {
 
 .messages-container {
     grid-area: main;
+    max-height: 100vh;
     width: 990px;
     display: grid;
     grid: 'message-list chat-messages' 1fr / 13fr 20fr;
+}
+
+.messages-container > * {
+    max-height: 100vh;
 }
 
 .sidebar-container {
@@ -833,6 +838,7 @@ input::placeholder {
 .open-chat {
     display: flex;
     flex-direction: column-reverse;
+    overflow-y: scroll;
     padding: 0 15px;
 }
 

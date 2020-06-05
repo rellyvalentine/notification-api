@@ -66,8 +66,8 @@ public class MessagingService {
         long currentUser = accountService.getLoggedInUserAccount().getUserId();
         List<Message> chatMessages =  messageStore.getMessagesByChatId(chatId);
         for(Message message : chatMessages) {
-            if(message.getUserId() == currentUser){
-                message.setReceived(false);
+            if(message.getUserId() != currentUser){
+                message.setReceived(true);
             }
         }
         return chatMessages;
