@@ -76,6 +76,8 @@ public class HomeController {
         List<Chat> chats = chatService.getChatsByUserId(user.getUserId());
         UserChatDTO addUsers = new UserChatDTO();
 
+        model.addAttribute("msgService", msgService);
+
         model.addAttribute("addUsers", addUsers);
         model.addAttribute("chats", chats);
         model.addAttribute("user", user);

@@ -57,7 +57,10 @@ async function connect() {
        });
 
        stompClient.subscribe('/user/queue/receive-message', function(message) {
-           createReceiveMessage(JSON.parse(message.body), openConvo.otherUser);
+           let receivedMessage = JSON.parse(message.body);
+           if(receivedMessage.chatId === openConvo.chatId){
+               createReceiveMessage(receivedMessage, openConvo.otherUser);
+           }
           console.log(message.body);
        });
 
@@ -234,6 +237,7 @@ sendButton.addEventListener("click", sendMessage, false);
 
 function sendMessage() {
     let message = {
+        chatId: openConvo.chatId,
         content: messageInput.value,
     };
     console.log(JSON.stringify(message));
@@ -243,7 +247,7 @@ function sendMessage() {
 
 
 function createSentMessage(message) {
-    console.log("creating message dynamically: "+message.content);
+    // console.log("creating message dynamically: "+message.content);
 
     let sentMessage = document.createElement("div");
     let messageContainer = document.createElement("div");
@@ -261,10 +265,11 @@ function createSentMessage(message) {
     sentMessage.append(messageContainer, messageDate);
     // currentChat.append(sentMessage);
     insertAfter(sentMessage);
+    updateRecent(message);
 }
 
 function createReceiveMessage(message, otherUser) {
-    console.log("receiving message dynamically: "+message.content+"//"+otherUser);
+    // console.log("receiving message dynamically: "+message.content+"//"+otherUser);
 
     let receiveMessage = document.createElement("div");
     let otherUserElement = document.createElement("a");
@@ -286,6 +291,7 @@ function createReceiveMessage(message, otherUser) {
     receiveMessage.append(otherUserElement, messageContainer, messageDate);
     // currentChat.append(receiveMessage);
     insertAfter(receiveMessage);
+    updateRecent(message);
 }
 
 function insertAfter(newNode) {
@@ -294,6 +300,16 @@ function insertAfter(newNode) {
     }
         let referenceNode = currentChat.firstChild;
         referenceNode.parentNode.insertBefore(newNode, referenceNode);
+}
+
+function updateRecent(message) {
+    console.log("updating recent to: "+message);
+    let convo = document.getElementById("chat"+message.chatId);
+    let date = convo.getElementsByClassName("message-date")[0];
+    let recent = convo.getElementsByClassName("recent-message")[0].getElementsByTagName("p")[0];
+
+    date.innerText = message.date;
+    recent.innerText = message.content;
 }
 
 $(function () {

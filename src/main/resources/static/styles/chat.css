@@ -612,6 +612,8 @@ input::placeholder {
 
 .conversation-selection > .message-date {
     grid-area: date;
+    max-width: 100px;
+    overflow-x: hidden;
     font-size: 15px;
     color: #8899A6;
 }

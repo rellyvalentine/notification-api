@@ -72,7 +72,6 @@ public class MessageController {
     public Message sendMessage(@Payload Message message){
         long senderId = accountService.getLoggedInUserAccount().getUserId();
         message.setUserId(senderId);
-        message.setChatId(this.openChat.getChatId());
         msgService.saveMessage(message);
         return msgService.sendMessage(message);
     }

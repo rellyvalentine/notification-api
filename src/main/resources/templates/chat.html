@@ -115,9 +115,11 @@
                     <h5 class="user-title" th:text="${chat.otherUser.name}"></h5>
                     <p th:text="'@'+${chat.otherUser.userName}"></p>
                 </div>
-                <div class="message-date">May 12</div>
+                <div class="message-date" th:if="${msgService.getChatMessages(chat.chatId).size()} > 0" th:text="${msgService.getRecent(chat.chatId).date}"></div>
+                <div class="message-date" th:unless="${msgService.getChatMessages(chat.chatId).size()} > 0">May 12</div>
                 <div class="recent-message">
-                    <p>this is a message welcoming you to the beta</p>
+                    <p th:if="${msgService.getChatMessages(chat.chatId).size()} > 0" th:text="${msgService.getRecent(chat.chatId).content}"></p>
+                    <p th:unless="${msgService.getChatMessages(chat.chatId).size()} > 0">this is a message welcoming you to the beta</p>
                 </div>
             </div>
         </div>
@@ -142,21 +144,6 @@
             </a>
         </header>
         <div class="open-chat" id="open-chat">
-<!--            <div class="user-message">-->
-<!--                <div class="message-container">-->
-<!--                    <p class="sent-content"></p>-->
-<!--                </div>-->
-<!--                <p>May 22, 2020, 5:07 PM</p>-->
-<!--            </div>-->
-<!--            <div class="receive-message">-->
-<!--                <a href="#">-->
-<!--                    <img th:src="@{default-images/default-profile.png}" src="default-images/default-profile.png" alt="User">-->
-<!--                </a>-->
-<!--                <div class="message-container">-->
-<!--                    <p class="received-content"></p>-->
-<!--                </div>-->
-<!--                <p>May 22, 2020, 5:04 PM</p>-->
-<!--            </div>-->
         </div>
         <div class="message-input">
             <div class="img-gif-selection-holder">

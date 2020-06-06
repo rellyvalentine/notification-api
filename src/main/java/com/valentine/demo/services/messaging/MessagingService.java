@@ -73,4 +73,9 @@ public class MessagingService {
         return chatMessages;
     }
 
+    public Message getRecent(long chatId){
+        List<Message> messages = getChatMessages(chatId);
+        return messages.get(messages.size()-1);
+    }
+
 }
