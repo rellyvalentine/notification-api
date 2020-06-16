@@ -10,7 +10,7 @@ const retrievedUserButton = document.getElementById("retrieved-user-button");
 //     $("#disconnect").prop("disabled", !connected) //when connected = false, button is disabled
 // }
 
-connect();
+connect().then();
 
 async function connect() {
 
@@ -73,20 +73,6 @@ function showUser(user) {
 function getUser() {
     console.log("send executed");
     stompClient.send("/app/get-person", {});
-}
-
-function updateBell(size) {
-
-    let blankNotif = document.getElementById("no-notif");
-    let notifNumber = document.getElementById("notif-number");
-
-    console.log("size: "+size);
-    if(notifNumber === null){ //if the page hasn't been refreshed, keep updating blank notif
-        blankNotif.style.display = "flex";
-        blankNotif.innerHTML = size;
-    } else {
-        notifNumber.innerHTML = size;
-    }
 }
 
 $(function () {

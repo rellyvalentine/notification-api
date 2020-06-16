@@ -1,21 +1,8 @@
 var stompClient = null;
-
-let searchPerson = document.getElementById("search-person");
-let foundUsers = document.getElementById("found-users-list");
-let selectedUsers = document.getElementById("selected-container");
-let usersForm = document.forms.userForm;
-
-let chatContainer = document.getElementById("chat-container");
-let noSelectionContainer = document.getElementById("no-selection-container");
-let convos = document.getElementsByClassName("conversation-selection");
-let currentChat = document.getElementById("open-chat");
-
 let openConvo;
 let prevConvo;
 
-let selectedUsersList = [];
-
-connect();
+connect().then();
 
 async function connect() {
 
@@ -33,17 +20,22 @@ async function connect() {
     stompClient.connect(headers, function(frame) {
        console.log("Connected: "+frame);
 
+       //search for users
        stompClient.subscribe('/user/topic/found-users', function(message) {
           console.log(message);
           let users = JSON.parse(message.body);
           showFoundUsers(users);
        });
+
+       //opening a chat
        stompClient.subscribe('/user/topic/chat', function(message) {
+           let chatContainer = document.getElementById("chat-container");
+           let noSelectionContainer = document.getElementById("no-selection-container");
            //un-hide the chat container
            noSelectionContainer.style.display = "none";
            chatContainer.style.display = "grid";
-           // console.log(message.body.chatId);
-           console.log(message.body);
+
+           // console.log(message.body);
            openConvo = JSON.parse(message.body);
 
            clearChat();
@@ -51,11 +43,13 @@ async function connect() {
            loadMessages(openConvo.otherUser);
        });
 
+       //sending messages
        stompClient.subscribe('/user/queue/sent-message', function(message) {
            console.log(message.body);
            createSentMessage(JSON.parse(message.body));
        });
 
+       //receiving messages
        stompClient.subscribe('/user/queue/receive-message', function(message) {
            let receivedMessage = JSON.parse(message.body);
            if(receivedMessage.chatId === openConvo.chatId){
@@ -64,122 +58,28 @@ async function connect() {
           console.log(message.body);
        });
 
+       //once convos are loaded, add an event listener to open them
+        let convos = document.getElementsByClassName("conversation-selection");
         for(let convo of convos) {
             convo.addEventListener("click", getConversation, false);
         }
+
+        stompClient.subscribe('/user/queue/bell-new', function (message) {
+            console.log("bell reached"+message);
+            updateBell(message.body);
+        });
     });
-}
-
-/**
- * CHAT CREATION
- */
-//search for users
-searchPerson.oninput = function(e) {
-  let s = e.target.value;
-  if(s !== ""){ //if the input is not empty, we'll search for users
-      stompClient.send("/app/search-users", {}, s);
-  } else {
-      foundUsers.style.display = "none";
-  }
-
-};
-
-function showFoundUsers(users) {
-    //clear the list
-    while(foundUsers.firstChild) {
-        foundUsers.removeChild(foundUsers.lastChild);
-    }
-
-    foundUsers.style.display = "flex";
-
-    for(let user of users) {
-
-        console.log(user);
-
-        let userElement = document.createElement("div");
-        userElement.className = "found-user";
-        userElement.id = "user"+user.userId;
-
-        let pfp = document.createElement("img");
-        let name = document.createElement("h5");
-        name.className = "user-title";
-        let username = document.createElement("p");
-
-        pfp.src = user.pfp;
-        name.innerText = user.name;
-        username.innerText = "@"+user.username;
-
-        userElement.append(pfp, name, username);
-
-        userElement.addEventListener("click", selectUser, false);
-        userElement.user = user; //we added the user object to the element's proto
-        foundUsers.append(userElement); //add the found user to the list
-    }
-}
-
-//event listeners pass the current target as its parameter
-function selectUser(userElement) {
-
-        let user = userElement.currentTarget.user; //the current target is passed as the param
-        console.log(user);
-
-        if(selectedUsersList.includes(user.userId)) { //if this user is not in the list
-           console.log("user is already in the list");
-        } else {
-            selectedUsers.style.display = "flex";
-            let addedUser = document.createElement("button");
-            addedUser.className = "selected-person";
-            addedUser.type = "button";
-            addedUser.id = user.userId;
-
-            let pfp = document.createElement("img");
-            let name = document.createElement("p");
-            let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            svg.setAttribute("viewBox", "0 0 24 24");
-            let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.setAttribute("d", "M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z");
-            svg.appendChild(path);
-
-            pfp.src = user.pfp;
-            name.innerText = user.name;
-            addedUser.append(pfp, name, svg); //create the addedUser button
-            addedUser.addEventListener("click", removeFromSelection);
-            selectedUsers.append(addedUser); //add the user to the document
-            selectedUsersList.push(user.userId); //add to the list to be submitted
-        }
-}
-
-function removeFromSelection(userElement) {
-    let userId = parseInt(userElement.currentTarget.id);
-    console.log("Removing user: "+userId);
-    console.log("Index in array: "+selectedUsersList.indexOf(userId));
-    selectedUsersList.splice(selectedUsersList.indexOf(userId), 1); //delete the value from the list
-
-    //remove in html
-    document.getElementById(userId.toString()).remove(); //remove the node
-
-    //check if we need to hide the selectedUsers
-    if(selectedUsersList.length === 0) {
-        selectedUsers.style.display = "none";
-    }
-
-    try{
-        document.getElementById("user"+userId).addEventListener("click", selectUser); //re-enable the addUser event
-    } catch (e) {
-        console.log("This user is no longer in the search results: "+e);
-    }
-}
-
-function createChat() {
-    usersForm.elements.users.value = selectedUsersList;
-    console.log(usersForm.elements.users.value);
-    usersForm.submit();
 }
 
 /**
  * MESSAGING FUNCTIONALITY
  */
 
+let currentChat = document.getElementById("open-chat");
+
+/**
+ * Clear the chat container from a previously opened chat
+ */
 function clearChat() {
     if(currentChat.firstChild != null) {
         while(currentChat.firstChild) {
@@ -194,6 +94,11 @@ const filterId = function(stringId) {
     }).join("");
 };
 
+/**
+ * Open an available conversation
+ * Close the previously opened conversation
+ * @param convo
+ */
 function getConversation(convo) {
 
     let currentConvo = convo.currentTarget.id;
@@ -208,6 +113,12 @@ function getConversation(convo) {
     stompClient.send("/app/open-chat", {}, (convoId));
 }
 
+/**
+ * load the messages from the selected chat
+ *
+ * @param otherUser
+ * @returns {Promise<void>}
+ */
 async function loadMessages(otherUser) {
 
     document.getElementById("header-name").innerText = otherUser.name;
@@ -215,8 +126,6 @@ async function loadMessages(otherUser) {
 
     const response = await fetch("http://localhost:8080/messages/api-v1/chat-messages");
     let chatMessages = await response.json();
-    console.log(chatMessages);
-    // let openChat = document.getElementById("open-chat");
 
     for(let message of chatMessages) {
         if(message.received === true) {
@@ -227,9 +136,7 @@ async function loadMessages(otherUser) {
             createSentMessage(message);
         }
     }
-
 }
-
 
 let messageInput = document.getElementById("message-input");
 let sendButton = document.getElementById("send-button");
@@ -263,7 +170,6 @@ function createSentMessage(message) {
     messageContainer.append(messageContent);
 
     sentMessage.append(messageContainer, messageDate);
-    // currentChat.append(sentMessage);
     insertAfter(sentMessage);
     updateRecent(message);
 }
@@ -289,7 +195,7 @@ function createReceiveMessage(message, otherUser) {
     messageDate.innerText = message.date;
 
     receiveMessage.append(otherUserElement, messageContainer, messageDate);
-    // currentChat.append(receiveMessage);
+
     insertAfter(receiveMessage);
     updateRecent(message);
 }
@@ -302,6 +208,10 @@ function insertAfter(newNode) {
         referenceNode.parentNode.insertBefore(newNode, referenceNode);
 }
 
+/**
+ * Update the most recent message in the Convo container
+ * @param message
+ */
 function updateRecent(message) {
     console.log("updating recent to: "+message);
     let convo = document.getElementById("chat"+message.chatId);
@@ -317,5 +227,4 @@ $(function () {
     $("#send-button").on('click', function (e) {
         e.preventDefault();
     });
-    $( "#new-chat-button" ).click(function() { createChat();});
 });
