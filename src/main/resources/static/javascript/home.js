@@ -41,6 +41,10 @@ async function connect() {
                 console.log("bell reached"+message);
                 updateBell(message.body);
             });
+
+            stompClient.subscribe('/user/queue/message-new', function(message){
+                updateMessageBell(message.body);
+            })
         });
 
 }

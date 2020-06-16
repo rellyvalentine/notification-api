@@ -7,6 +7,7 @@ import com.valentine.demo.entities.Notification;
 import com.valentine.demo.entities.Person;
 import com.valentine.demo.entities.UserAccount;
 import com.valentine.demo.entities.messaging.Chat;
+import com.valentine.demo.entities.messaging.Message;
 import com.valentine.demo.image.ProfilePicture;
 import com.valentine.demo.image.ProfilePictureService;
 import com.valentine.demo.services.NotificationService;
@@ -52,8 +53,11 @@ public class HomeController {
     public String userHome(Model model){
         UserAccount user = accountService.getLoggedInUserAccount();
         List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
+        List<Message> newMessages = msgService.getAllNewMessages(user.getUserId());
+
         model.addAttribute("user", user);
         model.addAttribute("newNotifications", newNotifications);
+        model.addAttribute("newMessages", newMessages);
 
         return "/user-home";
     }
@@ -74,6 +78,7 @@ public class HomeController {
         UserAccount user = accountService.getLoggedInUserAccount();
         List<Notification> newNotifications = notificationService.getNewNotifications(user.getUserId());
         List<Chat> chats = chatService.getChatsByUserId(user.getUserId());
+        List<Message> newMessages = msgService.getAllNewMessages(user.getUserId());
         UserChatDTO addUsers = new UserChatDTO();
 
         model.addAttribute("msgService", msgService);
@@ -82,6 +87,8 @@ public class HomeController {
         model.addAttribute("chats", chats);
         model.addAttribute("user", user);
         model.addAttribute("newNotifications", newNotifications);
+        model.addAttribute("newMessages", newMessages);
+
         return "/chat";
     }
 

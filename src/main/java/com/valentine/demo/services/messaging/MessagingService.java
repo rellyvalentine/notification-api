@@ -9,11 +9,15 @@ import com.valentine.demo.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +35,9 @@ public class MessagingService {
 
     @Autowired
     SimpMessageSendingOperations sendingOperations;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     public void saveMessage(Message message){
 
@@ -61,7 +68,7 @@ public class MessagingService {
         return message;
     }
 
-    //loading send messages
+
     public List<Message> getChatMessages(long chatId){
         long currentUser = accountService.getLoggedInUserAccount().getUserId();
         List<Message> chatMessages =  messageStore.getMessagesByChatId(chatId);
@@ -71,6 +78,35 @@ public class MessagingService {
             }
         }
         return chatMessages;
+    }
+
+    //getting RETRIEVED messages that are NEW
+    private List<Message> getNewMessages(long chatId){
+
+        return getChatMessages(chatId).stream()
+                .filter(Message::isReceived)
+                .filter(Message::isNew)
+                .collect(Collectors.toList());
+    }
+
+    public List<Message> getAllNewMessages(long userId){
+        List<Chat> chats = chatService.getChatsByUserId(userId);
+        List<Message> newMessages = new ArrayList<>();
+
+        for(Chat chat : chats){ //add the new messages from each chat
+            newMessages.addAll(getNewMessages(chat.getChatId()));
+        }
+        return newMessages;
+    }
+
+    @Transactional
+    public void readMessages(long chatId){
+        List<Message> newMessages = getNewMessages(chatId);
+        for(Message message : newMessages){
+            entityManager.createNativeQuery("UPDATE message SET is_new = false WHERE message_id = ?;")
+                    .setParameter(1, message.getMessageId())
+                    .executeUpdate();
+        }
     }
 
     public Message getRecent(long chatId){

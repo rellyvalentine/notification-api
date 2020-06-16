@@ -43,6 +43,10 @@ async function connect() {
            loadMessages(openConvo.otherUser);
        });
 
+       stompClient.subscribe('/user/queue/read-message', function(message){
+          updateMessageBell(message.body);
+       });
+
        //sending messages
        stompClient.subscribe('/user/queue/sent-message', function(message) {
            console.log(message.body);

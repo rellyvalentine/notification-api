@@ -20,3 +20,26 @@ function updateBell(size) {
         }
     }
 }
+
+function updateMessageBell(size){
+    console.log(size);
+    let blankMessage = document.getElementById("no-message");
+    let messageNumber = document.getElementById("message-number");
+
+    if(messageNumber === null){
+        if(size === '0'){
+            blankMessage.style.display = "none";
+        } else{
+            blankMessage.style.display = "flex";
+            blankMessage.innerHTML = size;
+        }
+
+    } else {
+        if(size === '0'){
+            messageNumber.style.display = "none";
+        } else{
+            messageNumber.innerHTML = size;
+        }
+    }
+
+}

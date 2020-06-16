@@ -58,6 +58,7 @@ public class MessageController {
         DemoApplication.logger.debug("User in chat: "+openChat.getOtherUser());
 //        return msgService.getChatMessages(id);
 //        return userChatService.getChatById(id);
+        readMessage();
         return openChat;
     }
 
@@ -73,7 +74,32 @@ public class MessageController {
         long senderId = accountService.getLoggedInUserAccount().getUserId();
         message.setUserId(senderId);
         msgService.saveMessage(message);
+
+        createMessageNotification();
+
         return msgService.sendMessage(message);
+    }
+
+
+    @RequestMapping("/queue/message-new")
+    public void createMessageNotification(){
+        long otherUser = openChat.getOtherUser().getUserId();
+        int newMessages = msgService.getAllNewMessages(otherUser).size();
+
+        DemoApplication.logger.debug(otherUser+" notifications: "+newMessages);
+
+        sendingOperations.convertAndSendToUser(accountService.getUserById(otherUser).getUserName(), "/queue/message-new", newMessages);
+    }
+
+    @RequestMapping("/queue/read-message")
+    public void readMessage(){
+        msgService.readMessages(openChat.getChatId());
+        long userId = accountService.getLoggedInUserAccount().getUserId();
+        int newMessages = msgService.getAllNewMessages(userId).size();
+
+        sendingOperations.convertAndSendToUser(accountService.getLoggedInUserAccount().getUserName(),
+                "/queue/read-message",
+                newMessages);
     }
 
 

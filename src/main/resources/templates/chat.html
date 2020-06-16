@@ -44,6 +44,8 @@
             </a>
 
             <a th:href="@{/messages}" href="#" class="nav-option current-page" role="link">
+                <div id="message-number" class="notif-number" th:if="${newMessages.size()} > 0" th:text="${newMessages.size()}"></div>
+                <div id="no-message" class="notif-number" th:unless="${newMessages.size()} > 0" th:text="${newMessages.size()}" style="display: none"></div>
                 <svg class="navbar-icon current-page" viewBox="0 0 24 24">
                     <g>
                         <path d="M11.55 12.082c.273.182.627.182.9 0L22 5.716V5.5c0-1.24-1.01-2.25-2.25-2.25H4.25C3.01 3.25 2 4.26 2 5.5v.197l9.55 6.385z"></path>
