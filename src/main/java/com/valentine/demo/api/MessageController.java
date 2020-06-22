@@ -12,10 +12,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.annotation.SendToUser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,7 +32,7 @@ public class MessageController {
     @Autowired
     SimpMessageSendingOperations sendingOperations;
 
-    Chat openChat;
+//    private Chat openChat;
 
     //this endpoint will be used with the WebSocket
 //    @GetMapping("/api-v1/user-chats")
@@ -53,18 +50,18 @@ public class MessageController {
 
     @MessageMapping("/open-chat")
     @SendToUser("/topic/chat")
-    public Chat openChat(long id){
-        this.openChat = userChatService.getChatById(id);
-        DemoApplication.logger.debug("User in chat: "+openChat.getOtherUser());
+    public Chat openChat(long chatId){
+        Chat openChat = userChatService.getChatById(chatId);
+//        DemoApplication.logger.debug("User in chat: "+openChat.getOtherUser());
 //        return msgService.getChatMessages(id);
 //        return userChatService.getChatById(id);
-        readMessage();
+        readMessage(openChat.getChatId());
         return openChat;
     }
 
     @GetMapping("/api-v1/chat-messages")
-    public List<Message> loadMessages(){
-        return msgService.getChatMessages(openChat.getChatId());
+    public List<Message> loadMessages(@RequestParam long chatId){
+        return msgService.getChatMessages(chatId);
     }
 
     @MessageMapping("/send")
@@ -75,25 +72,28 @@ public class MessageController {
         message.setUserId(senderId);
         msgService.saveMessage(message);
 
-        createMessageNotification();
+        createMessageNotification(message.getChatId());
 
         return msgService.sendMessage(message);
     }
 
 
     @RequestMapping("/queue/message-new")
-    public void createMessageNotification(){
-        long otherUser = openChat.getOtherUser().getUserId();
-        int newMessages = msgService.getAllNewMessages(otherUser).size();
+    public void createMessageNotification(long chatId){
+        long otherUser = userChatService.getChatById(chatId).getOtherUser().getUserId();
 
-        DemoApplication.logger.debug(otherUser+" notifications: "+newMessages);
+//        long otherUser = openChat.getOtherUser().getUserId();
+        DemoApplication.logger.debug("Other User: "+accountService.getUserById(otherUser).getUserName());
+        int newMessages = msgService.getAllNewMessages(otherUser).size();
 
         sendingOperations.convertAndSendToUser(accountService.getUserById(otherUser).getUserName(), "/queue/message-new", newMessages);
     }
 
     @RequestMapping("/queue/read-message")
-    public void readMessage(){
-        msgService.readMessages(openChat.getChatId());
+    public void readMessage(long chatId){
+        msgService.readMessages(chatId);
+
+//        msgService.readMessages(openChat.getChatId());
         long userId = accountService.getLoggedInUserAccount().getUserId();
         int newMessages = msgService.getAllNewMessages(userId).size();
 

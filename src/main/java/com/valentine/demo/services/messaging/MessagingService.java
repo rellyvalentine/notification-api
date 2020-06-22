@@ -46,7 +46,7 @@ public class MessagingService {
         //format the current time for the sql timestamp
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
         String currentDateString = current.format(formatter);
-        DemoApplication.logger.debug(currentDateString); //for testing
+//        DemoApplication.logger.debug(currentDateString); //for testing
 
         Timestamp sqlDate = Timestamp.valueOf(currentDateString); //convert to sql
 
@@ -68,12 +68,24 @@ public class MessagingService {
         return message;
     }
 
-
+    //user getting their own messages
     public List<Message> getChatMessages(long chatId){
         long currentUser = accountService.getLoggedInUserAccount().getUserId();
         List<Message> chatMessages =  messageStore.getMessagesByChatId(chatId);
         for(Message message : chatMessages) {
             if(message.getUserId() != currentUser){
+                message.setReceived(true);
+            }
+        }
+        return chatMessages;
+    }
+
+    //creating new message notification for another user
+    public List<Message> getChatMessages(long chatId, long userId){
+        List<Message> chatMessages = messageStore.getMessagesByChatId(chatId);
+
+        for(Message message : chatMessages){
+            if(message.getUserId() != userId){
                 message.setReceived(true);
             }
         }
@@ -89,13 +101,35 @@ public class MessagingService {
                 .collect(Collectors.toList());
     }
 
+    private List<Message> getNewMessages(long chatId, long userId){
+
+        return getChatMessages(chatId, userId).stream()
+                .filter(Message::isReceived)
+                .filter(Message::isNew)
+                .collect(Collectors.toList());
+    }
+
     public List<Message> getAllNewMessages(long userId){
         List<Chat> chats = chatService.getChatsByUserId(userId);
         List<Message> newMessages = new ArrayList<>();
 
+        boolean loggedIn = accountService.getLoggedInUserAccount().getUserId() == userId;
+
         for(Chat chat : chats){ //add the new messages from each chat
-            newMessages.addAll(getNewMessages(chat.getChatId()));
+//            DemoApplication.logger.debug("Chat: "+chat.getChatId()+" New messages: "+getNewMessages(chat.getChatId()).size());
+//            newMessages.addAll(getNewMessages(chat.getChatId()));
+            if(loggedIn){
+                DemoApplication.logger.debug("Retrieving own new messages");
+                newMessages.addAll(getNewMessages(chat.getChatId()));
+            } else{
+                DemoApplication.logger.debug("Sending new message notification");
+               newMessages.addAll(getNewMessages(chat.getChatId(), userId));
+            }
+            DemoApplication.logger.debug("Chat: "+chat.getChatId()+" New messages: "+getNewMessages(chat.getChatId()).size());
         }
+
+        DemoApplication.logger.debug(accountService.getUserById(userId).getUserName()+" notifications: "+newMessages.size());
+
         return newMessages;
     }
 

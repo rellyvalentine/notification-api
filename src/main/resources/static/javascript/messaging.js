@@ -128,7 +128,9 @@ async function loadMessages(otherUser) {
     document.getElementById("header-name").innerText = otherUser.name;
     document.getElementById("header-username").innerText ="@"+otherUser.username;
 
-    const response = await fetch("http://localhost:8080/messages/api-v1/chat-messages");
+
+
+    const response = await fetch("http://localhost:8080/messages/api-v1/chat-messages?chatId="+openConvo.chatId);
     let chatMessages = await response.json();
 
     for(let message of chatMessages) {
