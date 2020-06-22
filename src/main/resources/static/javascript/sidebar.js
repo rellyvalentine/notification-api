@@ -38,6 +38,7 @@ function updateMessageBell(size){
         if(size === '0'){
             messageNumber.style.display = "none";
         } else{
+            messageNumber.style.display = "flex";
             messageNumber.innerHTML = size;
         }
     }

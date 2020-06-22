@@ -1,6 +1,6 @@
 var stompClient = null;
-let openConvo;
-let prevConvo;
+let openConvo = null;
+let prevConvo = null;
 
 connect().then();
 
@@ -34,8 +34,6 @@ async function connect() {
            //un-hide the chat container
            noSelectionContainer.style.display = "none";
            chatContainer.style.display = "grid";
-
-           // console.log(message.body);
            openConvo = JSON.parse(message.body);
 
            clearChat();
@@ -59,7 +57,7 @@ async function connect() {
            if(receivedMessage.chatId === openConvo.chatId){
                createReceiveMessage(receivedMessage, openConvo.otherUser);
            }
-          console.log(message.body);
+          // console.log(message.body);
        });
 
        //once convos are loaded, add an event listener to open them
@@ -69,8 +67,12 @@ async function connect() {
         }
 
         stompClient.subscribe('/user/queue/bell-new', function (message) {
-            console.log("bell reached"+message);
+            // console.log("bell reached"+message);
             updateBell(message.body);
+        });
+
+        stompClient.subscribe('/user/queue/message-new', function(message) {
+           updateMessageBell(message.body);
         });
     });
 }
@@ -106,15 +108,28 @@ const filterId = function(stringId) {
 function getConversation(convo) {
 
     let currentConvo = convo.currentTarget.id;
-    document.getElementById(currentConvo).classList.add("open-convo");
-    if(prevConvo != null){
-        document.getElementById(prevConvo).classList.remove("open-convo");
-    }
-    prevConvo = currentConvo;
+    let open = () =>{
+        document.getElementById(currentConvo).classList.add("open-convo");
+        if(prevConvo != null){
+            document.getElementById(prevConvo).classList.remove("open-convo");
+        }
+        prevConvo = currentConvo;
 
-    let convoId = filterId(currentConvo);
-    console.log("Opening Chat: "+convoId);
-    stompClient.send("/app/open-chat", {}, (convoId));
+        let convoId = filterId(currentConvo);
+        console.log("Opening Chat: "+convoId);
+        stompClient.send("/app/open-chat", {}, (convoId));
+    };
+
+    if(openConvo === null){
+        open();
+    } else{
+        if(openConvo.chatId === parseInt(filterId(currentConvo))){
+            console.log("This chat is already open");
+        } else{
+            open();
+        }
+    }
+    
 }
 
 /**
@@ -219,7 +234,7 @@ function insertAfter(newNode) {
  * @param message
  */
 function updateRecent(message) {
-    console.log("updating recent to: "+message);
+    // console.log("updating recent to: "+message);
     let convo = document.getElementById("chat"+message.chatId);
     let date = convo.getElementsByClassName("message-date")[0];
     let recent = convo.getElementsByClassName("recent-message")[0].getElementsByTagName("p")[0];

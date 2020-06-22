@@ -1,6 +1,5 @@
 package com.valentine.demo.api;
 
-import com.valentine.demo.DemoApplication;
 import com.valentine.demo.entities.UserAccount;
 import com.valentine.demo.entities.messaging.Chat;
 import com.valentine.demo.entities.messaging.Message;
@@ -32,16 +31,7 @@ public class MessageController {
     @Autowired
     SimpMessageSendingOperations sendingOperations;
 
-//    private Chat openChat;
-
-    //this endpoint will be used with the WebSocket
-//    @GetMapping("/api-v1/user-chats")
-//    public List<Chat> userChats(){
-//        //get the chats of the currently logged in user
-//        return userChatService.getChatsByUserId(accountService.getLoggedInUserAccount().getUserId());
-//    }
-
-    //this service will be used with the WebSocket
+    //live updating search results
     @MessageMapping("/search-users")
     @SendToUser("/topic/found-users")
     public List<UserAccount> searchUsers(String s){
@@ -52,9 +42,6 @@ public class MessageController {
     @SendToUser("/topic/chat")
     public Chat openChat(long chatId){
         Chat openChat = userChatService.getChatById(chatId);
-//        DemoApplication.logger.debug("User in chat: "+openChat.getOtherUser());
-//        return msgService.getChatMessages(id);
-//        return userChatService.getChatById(id);
         readMessage(openChat.getChatId());
         return openChat;
     }
@@ -81,32 +68,21 @@ public class MessageController {
     @RequestMapping("/queue/message-new")
     public void createMessageNotification(long chatId){
         long otherUser = userChatService.getChatById(chatId).getOtherUser().getUserId();
-
-//        long otherUser = openChat.getOtherUser().getUserId();
-        DemoApplication.logger.debug("Other User: "+accountService.getUserById(otherUser).getUserName());
+//        DemoApplication.logger.debug("Other User: "+accountService.getUserById(otherUser).getUserName());
         int newMessages = msgService.getAllNewMessages(otherUser).size();
-
         sendingOperations.convertAndSendToUser(accountService.getUserById(otherUser).getUserName(), "/queue/message-new", newMessages);
     }
 
     @RequestMapping("/queue/read-message")
     public void readMessage(long chatId){
         msgService.readMessages(chatId);
-
-//        msgService.readMessages(openChat.getChatId());
-        long userId = accountService.getLoggedInUserAccount().getUserId();
+        UserAccount user = accountService.getLoggedInUserAccount();
+        long userId = user.getUserId();
         int newMessages = msgService.getAllNewMessages(userId).size();
 
-        sendingOperations.convertAndSendToUser(accountService.getLoggedInUserAccount().getUserName(),
+        sendingOperations.convertAndSendToUser(user.getUserName(),
                 "/queue/read-message",
                 newMessages);
     }
-
-
-//    public Message sentMessage(Message message){
-//        DemoApplication.logger.debug("MESSAGE HAS BEEN SENT: "+message.getMessageId());
-//        return message;
-//    }
-
 
 }

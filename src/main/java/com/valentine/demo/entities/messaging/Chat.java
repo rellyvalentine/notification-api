@@ -34,6 +34,9 @@ public class Chat {
     @Transient
     private boolean isGroupChat; //checks if the chat is a Group Chat
 
+//    @Transient
+//    private Message mostRecent; //holds the most recent message
+
     public Chat() {
 
     }
@@ -77,4 +80,12 @@ public class Chat {
     public void setGroupChat(boolean groupChat) {
         isGroupChat = groupChat;
     }
+
+//    public Message getMostRecent() {
+//        return mostRecent;
+//    }
+//
+//    public void setMostRecent(Message mostRecent) {
+//        this.mostRecent = mostRecent;
+//    }
 }

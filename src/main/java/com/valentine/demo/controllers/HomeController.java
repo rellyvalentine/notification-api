@@ -4,21 +4,14 @@ import com.valentine.demo.DemoApplication;
 import com.valentine.demo.dto.UserChatDTO;
 import com.valentine.demo.dto.UserPfpDTO;
 import com.valentine.demo.entities.Notification;
-import com.valentine.demo.entities.Person;
 import com.valentine.demo.entities.UserAccount;
 import com.valentine.demo.entities.messaging.Chat;
 import com.valentine.demo.entities.messaging.Message;
-import com.valentine.demo.image.ProfilePicture;
-import com.valentine.demo.image.ProfilePictureService;
 import com.valentine.demo.services.NotificationService;
-import com.valentine.demo.services.PersonService;
 import com.valentine.demo.services.UserAccountService;
 import com.valentine.demo.services.messaging.MessagingService;
 import com.valentine.demo.services.messaging.UserChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 public class HomeController {
@@ -92,7 +83,6 @@ public class HomeController {
         return "/chat";
     }
 
-
     @PostMapping("/messages/new")
     public String createChat(UserChatDTO addedUsers){
 
@@ -138,9 +128,6 @@ public class HomeController {
             ImageIO.write(src, "png", destination);
         }
 
-//        ProfilePicture image = new ProfilePicture();
-//        image.setId(pictureNumber);
-//        pfpService.save(image);
         user.setPfp(fileName);
         accountService.updateUser(user);
 

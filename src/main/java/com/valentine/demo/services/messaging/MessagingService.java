@@ -2,7 +2,6 @@ package com.valentine.demo.services.messaging;
 
 import com.valentine.demo.DemoApplication;
 import com.valentine.demo.dao.messaging.MessageStore;
-import com.valentine.demo.entities.UserAccount;
 import com.valentine.demo.entities.messaging.Chat;
 import com.valentine.demo.entities.messaging.Message;
 import com.valentine.demo.services.UserAccountService;
@@ -50,10 +49,12 @@ public class MessagingService {
 
         Timestamp sqlDate = Timestamp.valueOf(currentDateString); //convert to sql
 
-        message.setDate(sqlDate); //set the notification to the current time in SQL
+        message.setDate(sqlDate);
         message.setNew(true);
 
         messageStore.save(message);
+
+//        chatService.getChatById(message.getChatId()).setMostRecent(message);
     }
 
     //WebSocket live sending functionality
@@ -101,6 +102,7 @@ public class MessagingService {
                 .collect(Collectors.toList());
     }
 
+    //getting RETRIEVED messages that are NEW
     private List<Message> getNewMessages(long chatId, long userId){
 
         return getChatMessages(chatId, userId).stream()
@@ -116,20 +118,18 @@ public class MessagingService {
         boolean loggedIn = accountService.getLoggedInUserAccount().getUserId() == userId;
 
         for(Chat chat : chats){ //add the new messages from each chat
-//            DemoApplication.logger.debug("Chat: "+chat.getChatId()+" New messages: "+getNewMessages(chat.getChatId()).size());
-//            newMessages.addAll(getNewMessages(chat.getChatId()));
-            if(loggedIn){
-                DemoApplication.logger.debug("Retrieving own new messages");
+
+            if(loggedIn){ //logged in user getting new messages
+
+//                DemoApplication.logger.debug("Retrieving own new messages");
                 newMessages.addAll(getNewMessages(chat.getChatId()));
-            } else{
-                DemoApplication.logger.debug("Sending new message notification");
+            } else{ //user sending a new message notification
+
+//                DemoApplication.logger.debug("Sending new message notification");
                newMessages.addAll(getNewMessages(chat.getChatId(), userId));
             }
-            DemoApplication.logger.debug("Chat: "+chat.getChatId()+" New messages: "+getNewMessages(chat.getChatId()).size());
         }
-
-        DemoApplication.logger.debug(accountService.getUserById(userId).getUserName()+" notifications: "+newMessages.size());
-
+//        DemoApplication.logger.debug(accountService.getUserById(userId).getUserName()+" notifications: "+newMessages.size());
         return newMessages;
     }
 
