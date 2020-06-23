@@ -15,6 +15,7 @@ Password 1: password1
 Username 2: liluziburner
 Password 2: password2
 ```
+* Use two separate browsers (private browser, IE, Chrome, etc.) to log in as two different users to see live updates
 ## Built With
 * Java
 * Spring Boot
