@@ -44,6 +44,7 @@ public class UserAccountService implements UserDetailsService {
     }
 
     public void saveUser(UserAccount userAccount){
+        userAccount.setPfp("/default-images/default-profile.png");
         userAccountRepo.save(userAccount);
     }
 
